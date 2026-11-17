@@ -32,7 +32,7 @@ It separates shared configuration from versioned wording and local instance sett
 | `versions` | Read response: versions in ascending number order. |
 
 A class has no folder, effort, conversation, output schema or body of its own. `class_create`
-can take `body`, `criteria`, `template` and default `agent` to create the **first version** at
+can take `body`, `criteria` and `template` to create the **first version** at
 once; `published: true` freezes that version at creation. `class_patch` changes only class
 fields. Update wording by creating or editing a draft version.
 
@@ -46,7 +46,6 @@ shared configuration become class fields, and description and criteria form the 
 | `id`, `number`, `revision` | Service-assigned identity, successive number and independent edit revision. |
 | `body`, `criteria` | Task description and success criteria. |
 | `template` | Instantiation fills this version's body instead of copying it. |
-| `agent` | Default managed agent id for AI instances. |
 | `status` | `draft` or `published`. Only a draft is editable. |
 
 `class_create_version` creates a blank draft or copies the version named by `from`.
@@ -62,8 +61,9 @@ published version. Its `handle` selects the **destination** board, which may dif
 source. `spot` optionally places the head; omit it to let Dashboard place unplaced cards.
 `bodies` supplies filled template text by **class id**; versions without `template` copy their body.
 
-An AI instance receives its version's agent, class permission and optional runner, but no effort
-or folder. Set those locally and verify that the agent is active and published. Classes and
+Select each AI task's agent during instantiation. The `agents` map associates source class IDs
+with selected agent IDs. An instance receives its class permission and optional runner; set
+its effort and folder locally and verify that the agent is active and published. Classes and
 versions have no `outputType`; select output schemas on task instances, including Human tasks.
 Input placeholders in version wording are resolved at execution time, not instantiation time;
 see [structured data](structured-data.md).
