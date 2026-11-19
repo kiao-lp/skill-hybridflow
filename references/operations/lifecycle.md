@@ -22,5 +22,5 @@ on the objects to remove. Inspect references before deleting:
 | Cards | Removes incoming links from surviving cards. Deleting a schema leaves missing schema ids on task outputs, refusing their next play until repaired. |
 | Node classes | Removes their versions. Check affected instances and class chains. |
 | Workflow or workflow class | Ungroups its members and retains them. |
-| Agent | Only an unpublished agent can be deleted. Published agents are archived; cards naming a deleted draft need another agent. |
+| Agent | Inspect clone deletion risks, obtain owner confirmation, then delete using its state fingerprint. Tasks keep the reference; reinstall its repository or choose another agent. |
 | Runner | Check and replace any task pins to that runner. |

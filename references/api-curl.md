@@ -143,13 +143,13 @@ Direct store calls use the paths shown here.
 | `workflow_class_patch` | `PATCH /boards/{handle}/workflow-classes/{id}` |
 | `workflow_class_delete` | `DELETE /boards/{handle}/workflow-classes` |
 | `workflow_class_instantiate` | `POST /boards/{handle}/workflow-classes/{id}/instantiate` |
-| `agent_list` | `GET /agents`; `?archived=true` includes archives |
+| `agent_list` | `GET /agents` |
 | `agent_create` | `POST /agents` |
 | `agent_get` | `GET /agents/{id}` |
 | `agent_patch` | `PATCH /agents/{id}` |
 | `agent_publish` | `POST /agents/{id}/publish` |
 | `agent_versions` | `GET /agents/{id}/versions` |
-| `agent_delete` | `DELETE /agents/{id}`; unpublished agents only |
+| `agent_delete` | `GET /agents/{id}/deletion` to inspect; `DELETE /agents/{id}?confirmation=…` after confirmation |
 | `runner_list` | `GET /runners` |
 | `runner_create` | `POST /runners` |
 | `runner_get` | `GET /runners/{id}` |

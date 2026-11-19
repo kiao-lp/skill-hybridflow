@@ -95,7 +95,7 @@ replacement fields and verification. For other needs, follow the relevant row on
 | Create, configure, position or mark cards; write task instructions | [Cards](references/cards.md) | `board_add_cards`, `board_get_card`, `board_patch_card` |
 | Link tasks, branch, join, continue context, wait or shut down | [Chains](references/chains.md) | `board_chain_card`, `board_patch_card` |
 | Transfer results, define schemas, consume inputs or preserve data across a Human step | [Structured data](references/structured-data.md) | `board_schema_values`, `board_add_cards`, `board_patch_card`, `board_get_card` |
-| Select or configure an agent; publish, archive or inspect its history | [Agents](references/execution/agents.md) | `agent_list`, `agent_get`, `agent_create`, `agent_patch`, `agent_publish`, `agent_versions` |
+| Select or configure an agent; install, publish, delete or inspect its history | [Agents](references/execution/agents.md) | `agent_list`, `agent_get`, `agent_create`, `agent_patch`, `agent_publish`, `agent_versions`, `agent_delete` |
 | Choose the machine that executes an AI task | [Runners](references/execution/runners.md) | `runner_list`, `runner_get`, `board_patch_card` |
 | Reuse tasks or chains, publish versions or instantiate | [Node classes](references/classes.md) | `class_*`, `board_card_to_class` |
 | Group cards or classes; instantiate a reusable workflow | [Workflow groups](references/reuse/workflows.md) | `workflow_*`, `workflow_class_*` |

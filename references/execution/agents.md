@@ -6,59 +6,60 @@ document:
 
 # Managed agents
 
-Read to select, create, configure, publish or archive an agent. Task-level settings are in
-[cards](../cards.md#settings); [runners](runners.md) covers machine selection. The `agent_*`
-MCP tools perform these operations; HTTP equivalents are in [api-curl](../api-curl.md).
+Read to select, install, configure, publish or delete an agent. Task settings are in
+[cards](../cards.md); [runners](runners.md) covers machine selection. The `agent_*` MCP tools
+perform these operations; HTTP equivalents are in [api-curl](../api-curl.md).
 
 An agent names the harness, model, execution profile, standing instructions and selection
-purpose used by AI tasks. A task's `settings.agent` is its managed **id**, never a harness name.
+purpose used by AI tasks. A task's `settings.agent` is its stable repository **id**.
+agentic-resource-manager stores agents in Git working trees and discovers manual clones.
 
 ## Select an agent
 
 Read `agent_list` before choosing an id. Match the task to the **published description** when
-present. Descriptions guide selection and are never sent to turns; `instructions` are standing
-orders sent beside task prompts. An unknown agent id is refused when writing task settings.
-Only active, published agents can start new task conversations. Availability of the harness,
-model and profile is checked on the runner.
+present. Descriptions guide selection; `instructions` are standing orders sent beside task prompts.
+Published agents can start task conversations. The runner checks harness, model and profile
+availability. Choose the agent while defining the task.
+
+A missing agent retains its task reference. Change the task's agent or reinstall its repository
+to restore the same identity. Other settings of an existing task remain editable while it is missing.
 
 ## Fields
 
 | Field | Rule |
 |---|---|
-| `id` | Service-assigned identity, used by task settings. |
-| `name` | Required, unique across the store without regard to case. |
-| `harness` | `claude`, `codex`, `muse` or `pi`. |
-| `profileId` | Execution profile reference resolved by the runner, without credentials. Pi requires one unless a default Pi profile is configured. |
-| `model` | Explicit model identifier before publication; Pi may resolve its local profile default. |
-| `effort` | Published default effort. The task’s explicit effort takes priority. |
-| `description` | When to choose this agent. An empty string clears it. |
-| `instructions` | Standing orders for turns; independent of the selection description. |
-| `published` | Latest immutable Git publication, with its commit, tag and APM lock digest; absent before the first publication. |
-| `archived` | Hide from default listing and prevent new task conversations; false restores it. |
+| `repository` | Git URL for `agent_create`; cloning retains the repository's identity and publications. |
+| `id` | Generated for a new local agent; retained across cloning and reinstallation. |
+| `name` | Required for a new local agent; unique without regard to case. |
+| `harness` | `claude`, `codex`, `muse` or `pi`; required for a new local agent. |
+| `profileId` | Runner execution profile reference, without credentials. Pi uses its configured default when unset. |
+| `model` | Explicit before publication; Pi may resolve its local profile default. |
+| `effort` | Published default effort; the task's explicit effort takes priority. |
+| `description` | Selection guidance; an empty string clears it. |
+| `instructions` | Standing orders for turns. |
+| `published` | Latest Git publication, with commit, tag and APM lock digest. |
 | `revision` | Used for conditional patches and publication. |
 
-## Drafts and publications
+## Source and publication
 
-Each agent is an independent Git/APM project. Its native `.apm/agents/*.agent.md` definition
-contains model, default effort, description and instructions; `agent.json` contains identity,
-display name, harness and profile reference. Dashboard’s Agentic resources panel edits the source
-files and performs Git pull/push. New agents start with the assembly’s default resources.
+`agent_create` with a Git `repository` URL clones the project and resolves dependencies with APM.
+With no repository URL, supply a name and harness to initialize a local Git repository.
+Native `.apm/agents/*.agent.md` definitions contain model, effort, description and instructions;
+`agent.json` contains identity, display name, harness and profile. `apm.yml` declares dependencies.
+Dashboard's agent editor and Agentic resources panel edit these working-tree files.
 
-Creation and configuration patches edit a **draft**. Set the native model and default effort, then publish explicitly with `agent_publish`.
-Publication resolves APM dependencies and creates a Git commit and version tag.
-Until publication, new conversations use the preceding publication or cannot start if none
-exists. `agent_versions` reads the publication history, oldest first, including archived agents.
+Set model and default effort, then call `agent_publish`. Publication installs dependencies,
+compiles, commits, tags and pushes the release when a remote exists. `agent_versions` reads the
+history, oldest first. Existing conversations retain their selected publication; changing a task's
+agent forks its conversation onto that agent.
 
-Each new conversation captures its publication and commit: model, execution profile reference and standing
-instructions persist across replays, retries and manual messages. Later edits and publications
-do not replace that snapshot. Saved harness and model values remain readable even if current
-adapters no longer offer them. A new configuration does not retroactively update existing chats.
+## Delete a local clone
 
-Archive with an agent patch setting `archived: true`, and restore with false. Request archived
-agents explicitly when looking for one omitted from the default listing. Existing conversations
-retain their captured publication. Published agents cannot be deleted; archive them to preserve
-history. Deleting an unpublished agent leaves tasks that name it needing another agent.
+Call `agent_delete` with only the id to inspect `deletion` risks and its `confirmation` fingerprint.
+Present the warnings about missing remotes, local changes, unpushed refs or unavailable remotes.
+After the owner confirms, call `agent_delete` with that fingerprint. A repository change requires
+reviewing its current state again. Tasks retain their agent reference after deletion.
 
-The runner restores the committed package with APM’s frozen install. Every task execution
-records its agent commit, resolved harness, model, effort, runner, conversation and turn.
-The task’s Executions view exposes that immutable configuration.
+Workers install committed packages through APM's frozen install and retain a verified local cache.
+Every task execution records the agent commit, resolved harness, model, effort, runner,
+conversation and turn. Dashboard's Executions view exposes that immutable configuration.
