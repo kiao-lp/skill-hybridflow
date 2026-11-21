@@ -147,7 +147,7 @@ Direct store calls use the paths shown here.
 | `agent_create` | `POST /agents` |
 | `agent_get` | `GET /agents/{id}` |
 | `agent_patch` | `PATCH /agents/{id}` |
-| `agent_publish` | `POST /agents/{id}/publish` |
+| `agent_publish` | `POST /agents/{id}/publish`. After the owner accepts a `pushConfirmation` warning, pass its token as `confirmation`. |
 | `agent_versions` | `GET /agents/{id}/versions` |
 | `agent_delete` | `GET /agents/{id}/deletion` to inspect; `DELETE /agents/{id}?confirmation=…` after confirmation |
 | `runner_list` | `GET /runners` |

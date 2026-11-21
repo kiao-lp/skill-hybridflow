@@ -48,8 +48,14 @@ Native `.apm/agents/*.agent.md` definitions contain model, effort, description a
 `agent.json` contains identity, display name, harness and profile. `apm.yml` declares dependencies.
 Dashboard's agent editor and Agentic resources panel edit these working-tree files.
 
+Skills and MCP modules with a Git remote use Git references in `apm.yml`. **Local** in the agent
+editor temporarily uses the working tree. Clear those checkboxes before publishing. **Use local
+draft** in **New conversation** captures the draft and its current resources for a test conversation.
+
 Set model and default effort, then call `agent_publish`. Publication installs dependencies,
-compiles, commits, tags and pushes the release when a remote exists. `agent_versions` reads the
+compiles, commits, tags and pushes the release when a remote exists. If the tool returns
+`pushConfirmation`, explain that the listed local dependencies require Kiao. After the owner
+confirms, repeat the call with the returned token as `confirmation`. `agent_versions` reads the
 history, oldest first. Existing conversations retain their selected publication; changing a task's
 agent forks its conversation onto that agent.
 
