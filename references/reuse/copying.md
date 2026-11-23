@@ -28,6 +28,7 @@ creating cards directly is appropriate when the requested board is already known
 
 - Paste always mints new card ids. Links travel only when both ends are copied together, and
   are rewritten to the new ids. Never assume source ids identify pasted cards.
+- Routes follow the same rule. Paste preserves their order and remaps each retained `flowNode`.
 - Description, criteria, complexity and status travel. An AI `chat` never travels: it belongs
   to a conversation in the source installation. Successful `output` is never copied.
 - `valueType` schema references and task `outputType` travel only when the schema card is in
@@ -36,7 +37,7 @@ creating cards directly is appropriate when the requested board is already known
 - Unknown managed agent ids and runner pins are cleared. Choose valid destination settings
   and check completeness before Play. Review placement against existing destination cards.
 
-For an API-based copy, mint collision-free ids for the new set, remap its internal links and
-schema references, and omit runtime fields. Use one creation batch for internal references,
+For an API-based copy, mint collision-free ids for the new set, remap its internal links,
+route targets and schema references, and omit runtime fields. Use one creation batch for internal references,
 then read the board back. [Cards](../cards.md) defines writable fields and
 [operations](../operations.md) covers identities and verification.

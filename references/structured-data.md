@@ -125,7 +125,10 @@ A Value's payload never becomes task input merely through placement beside it.
 ## Data across control cards
 
 Data passes independently of conversation `mode` and `compact`. Schedulers and single-predecessor
-Gateways pass the value through. A Gateway join exposes an array in **board order**, with `null`
+gateways pass the value through. An exclusive gateway evaluates the value as `input` in CEL and
+forwards it to the selected successor. [Chains](chains.md)
+
+A parallel join exposes an array in **board order**, with `null`
 for any branch without an export. It has no input when no predecessor has output. Each outgoing
 branch receives the Gateway's stored output and can read `{{input.0.revision}}`, for example.
 Board order is not arrival order or the Gateway's outgoing branch order; establish the mapping

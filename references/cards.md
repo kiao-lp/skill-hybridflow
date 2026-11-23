@@ -15,7 +15,7 @@ For editing rules, read [operations](operations.md); for control flow, read [cha
 |---|---|
 | `id` | Stable UUID, minted on creation unless supplied for batch references. |
 | `title` | Card name. For an AI prompt, used only when `body` is empty. |
-| `type` | `human`, `ai`, `shutdown`, `scheduler`, `gateway`, `note` or `value`. Write it explicitly. |
+| `type` | `human`, `ai`, `shutdown`, `scheduler`, `gateway`, `exclusive-gateway`, `note` or `value`. Write it explicitly. |
 | `note` | Markdown displayed by a Note, including links. |
 | `value`, `valueType` | Value payload and optional type; see [structured data](structured-data.md). |
 | `body` | Task description in Markdown. |
@@ -29,6 +29,7 @@ For editing rules, read [operations](operations.md); for control flow, read [cha
 | `status`, `chat` | Work state and AI conversation; see [status and chat](#status-and-chat). |
 | `archived` | Boolean, false by default. Hides the card and its links; stored links still count toward topology limits. |
 | `onSuccess` | Successor links and AI conversation options; see [chains](chains.md). |
+| `routes` | Ordered `{condition, flowNode}` entries for an exclusive gateway. [Chains](chains.md) |
 | `workflow` | This board's workflow group id, or empty for none. |
 | `classVersion` | Read response: `{classId, classTitle, versionId, versionNumber}`. Patch with a version id to rebind, or `""` to detach; see [classes](classes.md). |
 | `run` | Read-only id of the run holding the card, or empty. |
@@ -44,7 +45,8 @@ For editing rules, read [operations](operations.md); for control flow, read [cha
 | `ai` | Task fields, plus complete AI `settings`, conversation options and optional `outputType`. |
 | `shutdown` | Title, tags, status and position. No task fields or successor. |
 | `scheduler` | Title, tags, status, position, exactly one of `at` and `duration`, single successor. |
-| `gateway` | Title, tags, status, position and `onSuccess.flowNodes` branches. |
+| `gateway` | Parallel gateway with `onSuccess.flowNodes` branches. |
+| `exclusive-gateway` | `onSuccess.flowNodes` branches and `routes` in evaluation order. |
 | `note` | `note` and position. The editor has no title, tags or status controls. |
 | `value` | `title`, `value`, optional `valueType` and position. |
 

@@ -36,6 +36,7 @@ read-only fields. Preserve supported extension settings under `settings.extra`.
 |---|---|
 | `settings`, `tags`, `criteria`, `onSuccess` | Whole replacement. Read the current value, change what is needed, and preserve its other entries. |
 | `onSuccess.flowNodes` | Whole Gateway branch list when patching `onSuccess`. The link-only operation instead adds one branch. |
+| `routes` | Whole ordered exclusive gateway route list. Send `[]` to clear it. |
 | `clearSpot: true` | Clear a card or class position. |
 | `clearComplexity: true` | Clear a task estimate. |
 | `workflow: ""`, `classVersion: ""`, `workflowClass: ""` | Remove the respective membership or class-version binding. |

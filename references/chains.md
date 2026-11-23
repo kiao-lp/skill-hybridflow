@@ -18,12 +18,13 @@ Only explicit successor links define execution order. Dragging, grouping and tag
 |---|---|---|
 | AI, Human, Scheduler | At most one | At most one, in `onSuccess.flowNode` |
 | Shutdown | At most one | None |
-| Gateway | Several | Several, in `onSuccess.flowNodes` |
+| Parallel gateway | Several | Several, in `onSuccess.flowNodes` |
+| Exclusive gateway | At most one | Several, in `onSuccess.flowNodes` |
 | Note, Value | None | None |
 
 Targets must be different cards on the same board. Incoming links count Gateway branches and
 links stored on archived cards. Unlink an occupied target before assigning another predecessor,
-or insert a Gateway to join branches. Batch creation, patches and link operations enforce these
+or insert a parallel gateway to join branches. Batch creation, patches and link operations enforce these
 limits. The runner validates topology before Play, restart and resume; repair invalid legacy
 chains before starting them. Self-links are refused; a run stops when it reaches a card it has
 already played. Do not use cycles as a repeat mechanism.
@@ -43,7 +44,7 @@ options. Classes link class ids instead of card ids; see [classes](classes.md).
 | Key | Rule |
 |---|---|
 | `flowNode` | Single successor for tasks and Schedulers; empty ends the chain. |
-| `flowNodes` | Gateway branches, in the listed launch order. Never use the singular field for a Gateway. |
+| `flowNodes` | Linked branches for either gateway. Exclusive gateways use `routes` for evaluation order. |
 | `mode` | AI only: `end` (default) or `continue`. |
 | `compact` | AI only: shorten this card's conversation after success; default false. |
 
@@ -101,6 +102,8 @@ A Scheduler waits once, then follows its successor. Choose exactly one mode:
 
 ## Gateways
 
+### Parallel gateway
+
 ```json
 {"title":"Both done?","type":"gateway","onSuccess":{"flowNodes":["<left-id>","<right-id>"]}}
 ```
@@ -108,13 +111,40 @@ A Scheduler waits once, then follows its successor. Choose exactly one mode:
 Every card naming the Gateway is an incoming branch. The Gateway fires only when all incoming
 branches are `done`. An arrival before that ends its run and leaves the Gateway untouched;
 the last arrival fires it. Direct Play while branches remain unfinished is refused and names them.
-This is an AND join, without conditional selection. A failed branch holds the join until resolved.
+A failed branch holds the AND join until resolved.
 
 Firing starts every outgoing branch in parallel as a separate run and ends the arriving run.
 Each AI branch uses its own conversation. A Gateway with no outgoing branches simply finishes;
 with no incoming branches it can act as a split. It needs no task settings, description or mode,
 and it has no node class. For the order and shape of joined results, read
 [structured data](structured-data.md#data-across-control-cards).
+
+### Exclusive gateway
+
+Link the producer to a card of type `exclusive-gateway`. Link the possible successors in
+`onSuccess.flowNodes`, then define the ordered `routes` array on the gateway.
+
+```json
+{
+  "title": "Approved?",
+  "type": "exclusive-gateway",
+  "onSuccess": { "flowNodes": ["<publish-id>", "<review-id>"] },
+  "routes": [
+    { "condition": "has(input.approved) && input.approved == true", "flowNode": "<publish-id>" },
+    { "condition": "true", "flowNode": "<review-id>" }
+  ]
+}
+```
+
+CEL sees the predecessor's successful JSON output as `input`. Each evaluated condition must
+return a boolean. The first `true` condition selects one successor and passes the JSON through.
+The gateway ends in `error` if the predecessor has no JSON output, a condition fails to evaluate,
+or every condition is false. Use `has(input.field)` to guard optional object fields. An exclusive
+split starts one path, so a parallel join fed by all its alternatives would wait for every path.
+
+In Dashboard, link successors on the canvas or in **Linked successors**. Add and edit routes in
+the gateway panel and drag the handles to set their order. With MCP or HTTP, patch `routes` with
+the complete array in evaluation order. Unlinking a successor removes every route to it.
 
 ## Shutdown
 

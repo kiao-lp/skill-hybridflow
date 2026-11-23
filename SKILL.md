@@ -1,6 +1,6 @@
 ---
 name: hybridflow
-description: Design and edit hybridflow boards and workflows, including tasks, agents, runners and reusable classes. Use for human steps, branching, waits, JSON Schema values and task handoffs, or retired .workflow.json boards.
+description: Design and edit hybridflow boards and workflows, including tasks, agents, runners and reusable classes. Use for human steps, CEL routing, parallel branches, waits, JSON Schema values and task handoffs, or retired .workflow.json boards.
 ---
 
 # Hybridflow
@@ -27,13 +27,15 @@ Choose the capabilities that serve that result:
 | Delegate work | **AI task**, with a selected agent, effort, permissions and working folder | It needs complete execution settings and an available agent on the runner. |
 | Have a person decide or contribute | **Human task**, with instructions, criteria and a submitted result | Reaching it ends the current run. Dashboard can start a ready successor on submission; plan that boundary. |
 | Delay work | **Scheduler**, for a duration from each start or a particular local datetime | It is a single wait; it does not repeat a workflow. It carries data but no conversation. |
-| Run independent branches or wait for all results | **Gateway**, which starts all outgoing branches after all incoming branches finish | It is an AND join and split. It neither selects a branch by a condition nor continues after a failed branch. |
+| Run independent branches or wait for all results | **Parallel gateway**, which starts all outgoing branches after all incoming branches finish | Every incoming branch must complete successfully. |
+| Choose a path from a JSON result | **Exclusive gateway**, which follows the first true CEL route | One predecessor supplies the JSON. Use a final `true` condition for a default path. |
 | Turn off the runner machine after successful work | **Shutdown**, as the final step | It needs a configured shutdown command. Failure or interruption earlier in the chain leaves the machine on. |
 | Explain the board | **Note**, for Markdown and links | Display only; it does not run or supply task input. |
 | Keep JSON or define a shared data contract | **Value**, optionally typed or used as a JSON Schema | Display only; placing it near a task does not transfer its value to that task. |
 
 Tasks and Schedulers each have at most one predecessor and one successor. Shutdown has at most
-one predecessor and no successor. Use Gateways for multiple links; Notes and Values have none.
+one predecessor and no successor. Both gateways can split. Only the parallel gateway can join.
+Notes and Values have no links.
 Links stay within a board. Do not model repetition with cycles: a run stops at a card it has
 already played. Success links are followed after successful completion; define recovery for
 errors and interruptions separately from the successful path.
@@ -58,9 +60,8 @@ validation approved; structured results can pass even when conversations end.
 
 ### Useful patterns and their limits
 
-- **Produce → validate → act:** pass the artifact identity and verdict, then verify that the
-  action uses the validated artifact. A successful validation task can still report a negative
-  verdict; a success link alone does not test that verdict.
+- **Produce → validate → act:** pass the artifact identity and verdict. Route the verdict through
+  an exclusive gateway when approvals and rejections require different successors.
 - **Prepare → Human decision → act:** make the requested decision explicit, preserve earlier
   results without asking the person to recopy them, and configure how execution resumes.
 - **Split → independent work → join → synthesize:** parallelize only independent work; the join
@@ -93,7 +94,7 @@ replacement fields and verification. For other needs, follow the relevant row on
 |---|---|---|
 | Find, create, rename or inspect a board; resolve a conflict | [Operations](references/operations.md) | `board_list`, `board_get`, `board_create`, `board_patch` |
 | Create, configure, position or mark cards; write task instructions | [Cards](references/cards.md) | `board_add_cards`, `board_get_card`, `board_patch_card` |
-| Link tasks, branch, join, continue context, wait or shut down | [Chains](references/chains.md) | `board_chain_card`, `board_patch_card` |
+| Link tasks, route by CEL, split or join branches, continue context, wait or shut down | [Chains](references/chains.md) | `board_chain_card`, `board_patch_card` |
 | Transfer results, define schemas, consume inputs or preserve data across a Human step | [Structured data](references/structured-data.md) | `board_schema_values`, `board_add_cards`, `board_patch_card`, `board_get_card` |
 | Select or configure an agent; install, publish, delete or inspect its history | [Agents](references/execution/agents.md) | `agent_list`, `agent_get`, `agent_create`, `agent_patch`, `agent_publish`, `agent_versions`, `agent_delete` |
 | Choose the machine that executes an AI task | [Runners](references/execution/runners.md) | `runner_list`, `runner_get`, `board_patch_card` |
