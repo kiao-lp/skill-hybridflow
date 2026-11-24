@@ -51,6 +51,7 @@ For editing rules, read [operations](operations.md); for control flow, read [cha
 | `bitbucket-commit-status` | `commitId`, `commitStatus` and a single successor. |
 | `gateway` | Parallel gateway with `onSuccess.flowNodes` branches. |
 | `exclusive-gateway` | `onSuccess.flowNodes` branches and `routes` in evaluation order. |
+| `limiter` | `maxPasses`, current `remainingPasses` and two successors in `onSuccess.flowNodes` order. Patch `resetPasses: true` to refill it. |
 | `note` | `note` and position. The editor has no title, tags or status controls. |
 | `value` | `title`, `value`, optional `valueType` and position. |
 

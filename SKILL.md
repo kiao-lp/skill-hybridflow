@@ -31,12 +31,13 @@ Choose the capabilities that serve that result:
 | Wait for a commit's build status | **Bitbucket Commit Status**, for one commit and target status | The worker needs Bitbucket Cloud credentials with repository read access. |
 | Run independent branches or wait for all results | **Parallel gateway**, which starts all outgoing branches after all incoming branches finish | Every incoming branch must complete successfully. |
 | Choose a path from a JSON result | **Exclusive gateway**, which follows the first true CEL route | One predecessor supplies the JSON. Use a final `true` condition for a default path. |
+| Use one path a fixed number of times | **Limiter**, which counts down and then uses its second path | Link two successors. The count persists across runs until reset. |
 | Turn off the runner machine after successful work | **Shutdown**, as the final step | It needs a configured shutdown command. Failure or interruption earlier in the chain leaves the machine on. |
 | Explain the board | **Note**, for Markdown and links | Display only; it does not run or supply task input. |
 | Keep JSON or define a shared data contract | **Value**, optionally typed or used as a JSON Schema | Display only; placing it near a task does not transfer its value to that task. |
 
 Tasks and intermediate events each have at most one predecessor and one successor. Shutdown has at most
-one predecessor and no successor. Both gateways can split. Only the parallel gateway can join.
+one predecessor and no successor. Gateways and limiters can split. Only the parallel gateway can join.
 Notes and Values have no links.
 Links stay within a board. Do not model repetition with cycles: a run stops at a card it has
 already played. Success links are followed after successful completion; define recovery for

@@ -126,7 +126,8 @@ A Value's payload never becomes task input merely through placement beside it.
 
 Data passes independently of conversation `mode` and `compact`. Schedulers and single-predecessor
 gateways pass the value through. An exclusive gateway evaluates the value as `input` in CEL and
-forwards it to the selected successor. [Chains](chains.md)
+forwards it to the selected successor. A limiter forwards the value to the branch selected
+by its counter. [Chains](chains.md)
 
 A parallel join exposes an array in **board order**, with `null`
 for any branch without an export. It has no input when no predecessor has output. Each outgoing

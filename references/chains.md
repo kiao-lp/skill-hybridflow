@@ -20,6 +20,7 @@ Only explicit successor links define execution order. Dragging, grouping and tag
 | Shutdown | At most one | None |
 | Parallel gateway | Several | Several, in `onSuccess.flowNodes` |
 | Exclusive gateway | At most one | Several, in `onSuccess.flowNodes` |
+| Limiter | At most one | At most two, in `onSuccess.flowNodes` order |
 | Note, Value | None | None |
 
 Targets must be different cards on the same board. Incoming links count Gateway branches and
@@ -44,7 +45,7 @@ options. Classes link class ids instead of card ids; see [classes](classes.md).
 | Key | Rule |
 |---|---|
 | `flowNode` | Single successor for tasks and intermediate events. Empty ends the chain. |
-| `flowNodes` | Linked branches for either gateway. Exclusive gateways use `routes` for evaluation order. |
+| `flowNodes` | Linked branches. Exclusive gateways use `routes` for evaluation order. Limiters use the successor order. |
 | `mode` | AI only: `end` (default) or `continue`. |
 | `compact` | AI only: shorten this card's conversation after success; default false. |
 
@@ -166,6 +167,19 @@ split starts one path, so a parallel join fed by all its alternatives would wait
 In Dashboard, link successors on the canvas or in **Linked successors**. Add and edit routes in
 the gateway panel and drag the handles to set their order. With MCP or HTTP, patch `routes` with
 the complete array in evaluation order. Unlinking a successor removes every route to it.
+
+### Limiter
+
+```json
+{"type":"limiter","title":"Use first branch twice","maxPasses":2,"onSuccess":{"flowNodes":["<first-id>","<second-id>"]}}
+```
+
+A limiter needs two live successors. It uses the first branch while `remainingPasses` is
+positive, spending one pass each time. At zero it uses the second branch. It passes any
+incoming JSON to the chosen successor.
+
+Change `maxPasses` or patch `resetPasses: true` to refill the counter. In Dashboard, set the
+maximum and branches in the card panel and click **Reset counter** to refill it.
 
 ## Shutdown
 
