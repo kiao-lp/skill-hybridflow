@@ -17,6 +17,7 @@ body or position. Neither grouping determines execution order: links remain the 
 |---|---|---|
 | Create and assign members | `workflow_create`, `flowNodes` ids | `workflow_class_create`, `classes` ids |
 | Read or rename | `workflow_get`, `workflow_patch` | `workflow_class_get`, `workflow_class_patch` |
+| Copy and paste a group and its cards | `workflow_copy`, `workflow_paste` | |
 | Change a member's group | Patch the card's `workflow` | Patch the class's `workflowClass` |
 | Remove a group | `workflow_delete` | `workflow_class_delete` |
 
@@ -24,6 +25,8 @@ Membership is stored on each member, at most one group per card or class. Creati
 already-grouped members moves them. An empty membership id ungroups a member. Deleting the group
 ungroups and retains its members. Members and their group must belong to the same board; a
 workflow holds cards only, and a workflow class holds classes only.
+
+Use [workflow copy and paste](copying.md) to duplicate a group and its cards.
 
 `workflow_class_list` discovers reusable groups across boards. `workflow_class_instantiate`
 creates a workflow on the destination board with one card per member class, each from its latest

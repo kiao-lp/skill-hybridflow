@@ -4,7 +4,24 @@ document:
   role: PRIMARY_SOURCE
 ---
 
-# Copying cards
+# Copying workflows and cards
+
+## Copy a workflow
+
+Call `workflow_copy` with the source board `handle` and workflow `id` from `board_get`.
+Pass the returned object as `clipboard` to `workflow_paste` with the destination board
+`handle`. The optional `spot` gives the preferred top-left canvas position. Paste below
+the existing cards by omitting it. The same JSON works with Dashboard's **Copy workflow as
+JSON** and **Paste here**.
+
+Paste returns the new workflow and its cards in one write. It preserves the name, all
+members including archived cards, and relative layout. Internal successor links, ordered
+routes and schema references follow the new IDs. Keep schemas and both limiter branches
+in the copied group to carry those bindings. The copy starts with fresh execution state
+and limiter counters. Draft and blocked statuses carry over, and unavailable managed
+agent and runner selections are cleared. Review the result through `board_get`.
+
+## Copy individual cards
 
 Read when transferring cards between boards or KIAO installations, or preparing JSON for a
 person to paste. Clipboard paste performs remapping; a direct `board_add_cards` call takes

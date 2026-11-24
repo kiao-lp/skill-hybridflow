@@ -95,6 +95,7 @@ Optional fields below are supplied only when needed.
 | Create version | Version fields and/or `from` version id; `{}` creates a blank draft. |
 | Instantiate class or workflow class | Optional `spot` and `bodies`; `{}` uses defaults. |
 | Create workflow ([group rules](reuse/workflows.md)) | `{"name":"Release","flowNodes":["<id>", ...]}`; both fields optional. |
+| Paste workflow ([clipboard format](reuse/copying.md)) | `{"clipboard": <copy response>, "spot": {"x": 100, "y": 200}}`; `spot` is optional. |
 | Create workflow class ([group rules](reuse/workflows.md)) | `{"name":"Release","classes":["<id>", ...]}`; both fields optional. |
 | Rename workflow, workflow class or runner | `{"name":"New name"}` |
 | Delete workflows | `{"workflows":["<id>", ...]}` |
@@ -135,6 +136,8 @@ Direct store calls use the paths shown here.
 | `class_instantiate` | `POST /boards/{handle}/flow-node-classes/{id}/instantiate` |
 | `workflow_create` | `POST /boards/{handle}/workflows` |
 | `workflow_get` | `GET /boards/{handle}/workflows/{id}` |
+| `workflow_copy` | `GET /boards/{handle}/workflows/{id}/clipboard` |
+| `workflow_paste` | `POST /boards/{handle}/workflows/clipboard` |
 | `workflow_patch` | `PATCH /boards/{handle}/workflows/{id}` |
 | `workflow_delete` | `DELETE /boards/{handle}/workflows` |
 | `workflow_class_list` | `GET /workflow-classes` |

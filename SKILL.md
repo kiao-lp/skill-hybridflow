@@ -104,7 +104,7 @@ replacement fields and verification. For other needs, follow the relevant row on
 | Reuse tasks or chains, publish versions or instantiate | [Node classes](references/classes.md) | `class_*`, `board_card_to_class` |
 | Group cards or classes; instantiate a reusable workflow | [Workflow groups](references/reuse/workflows.md) | `workflow_*`, `workflow_class_*` |
 | Apply description templates or distinguish them from class templates | [Templates](references/reuse/templates.md) | `board_add_cards`, `board_patch_card` |
-| Copy cards to another board or installation; prepare clipboard JSON | [Copying](references/reuse/copying.md) | `board_add_cards` |
+| Copy a whole workflow or individual cards; prepare clipboard JSON | [Copying](references/reuse/copying.md) | `workflow_copy`, `workflow_paste`, `board_add_cards` |
 | Archive or remove objects | [Lifecycle operations](references/operations/lifecycle.md) | `board_patch`, `board_patch_card`, the relevant `*_delete` tool |
 | Inspect changes or usage; diagnose the store version | [Observation](references/operations/observation.md) | `board_changes`, `board_card_usage`, `hybridflow_schema` |
 | Diagnose access or operate without working MCP tools | [HTTP fallback and endpoint map](references/api-curl.md) | Tool-to-endpoint map |
