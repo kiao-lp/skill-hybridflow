@@ -16,7 +16,7 @@ Only explicit successor links define execution order. Dragging, grouping and tag
 
 | Type | Incoming links | Outgoing links |
 |---|---|---|
-| AI, Human, Scheduler | At most one | At most one, in `onSuccess.flowNode` |
+| AI, Human, Scheduler, Bitbucket PR Status | At most one | At most one, in `onSuccess.flowNode` |
 | Shutdown | At most one | None |
 | Parallel gateway | Several | Several, in `onSuccess.flowNodes` |
 | Exclusive gateway | At most one | Several, in `onSuccess.flowNodes` |
@@ -43,7 +43,7 @@ options. Classes link class ids instead of card ids; see [classes](classes.md).
 
 | Key | Rule |
 |---|---|
-| `flowNode` | Single successor for tasks and Schedulers; empty ends the chain. |
+| `flowNode` | Single successor for tasks and intermediate events. Empty ends the chain. |
 | `flowNodes` | Linked branches for either gateway. Exclusive gateways use `routes` for evaluation order. |
 | `mode` | AI only: `end` (default) or `continue`. |
 | `compact` | AI only: shorten this card's conversation after success; default false. |
@@ -59,7 +59,7 @@ Mode and compaction belong to the source card even when its link is removed. Leg
 "compact"` is read as continue plus compaction; new writes use the two separate fields.
 Only AI cards have conversation options, and their execution settings must be complete.
 
-Schedulers, Gateways, Shutdowns and Human tasks carry no AI conversation forward. A `continue`
+Schedulers, Bitbucket PR Status events, Gateways, Shutdowns and Human tasks carry no AI conversation forward. A `continue`
 link before one ends conversation continuity there. Structured data follows separate rules and
 can cross waits and Gateways even with `end` or compaction.
 
@@ -99,6 +99,16 @@ A Scheduler waits once, then follows its successor. Choose exactly one mode:
   configured, `ready` Scheduler offers Play. Its title is edited in the panel and hidden on the canvas.
 - The Scheduler is `running` while waiting and `done` when the wait finishes. Stop cancels the
   wait and leaves its successor unplayed. It has no task settings or conversation.
+
+## Bitbucket PR Status
+
+Set `pullRequestId` to a number such as `42` for the worker's default repository, or
+`workspace/repository#42` for a specific Bitbucket Cloud repository. Set `pullRequestStatus`
+to `OPEN`, `MERGED`, `DECLINED` or `SUPERSEDED`. The worker reads the token and
+repository defaults from its state directory's `atlassian.json` file.
+
+The event checks immediately and continues on the first match. While waiting it passes
+no result. On completion it forwards the incoming JSON to its successor. Stop interrupts the wait.
 
 ## Gateways
 

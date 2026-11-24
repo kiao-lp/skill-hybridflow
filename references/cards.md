@@ -15,7 +15,7 @@ For editing rules, read [operations](operations.md); for control flow, read [cha
 |---|---|
 | `id` | Stable UUID, minted on creation unless supplied for batch references. |
 | `title` | Card name. For an AI prompt, used only when `body` is empty. |
-| `type` | `human`, `ai`, `shutdown`, `scheduler`, `gateway`, `exclusive-gateway`, `note` or `value`. Write it explicitly. |
+| `type` | `human`, `ai`, `shutdown`, `scheduler`, `bitbucket-pr-status`, `gateway`, `exclusive-gateway`, `note` or `value`. Write it explicitly. |
 | `note` | Markdown displayed by a Note, including links. |
 | `value`, `valueType` | Value payload and optional type; see [structured data](structured-data.md). |
 | `body` | Task description in Markdown. |
@@ -24,6 +24,7 @@ For editing rules, read [operations](operations.md); for control flow, read [cha
 | `settings` | Task execution configuration; see [settings](#settings). |
 | `outputType`, `output` | Task export schema and read-only last result; see [structured data](structured-data.md). |
 | `at`, `duration` | Alternative Scheduler waits; see [Schedulers](chains.md#schedulers). |
+| `pullRequestId`, `pullRequestStatus` | Bitbucket PR Status identifier and target state. [Chains](chains.md) |
 | `spot` | Position on this board's canvas; see [placement](#placement). |
 | `tags` | Array of plain words; see [tags](#tags). |
 | `status`, `chat` | Work state and AI conversation; see [status and chat](#status-and-chat). |
@@ -37,7 +38,7 @@ For editing rules, read [operations](operations.md); for control flow, read [cha
 
 ## Flow node type
 
-**Task** means AI or Human. **Flow node** or **card** includes all seven types.
+**Task** means AI or Human. **Flow node** and **card** cover all the types below.
 
 | Type | Fields specific to that type |
 |---|---|
@@ -45,6 +46,7 @@ For editing rules, read [operations](operations.md); for control flow, read [cha
 | `ai` | Task fields, plus complete AI `settings`, conversation options and optional `outputType`. |
 | `shutdown` | Title, tags, status and position. No task fields or successor. |
 | `scheduler` | Title, tags, status, position, exactly one of `at` and `duration`, single successor. |
+| `bitbucket-pr-status` | `pullRequestId`, `pullRequestStatus` and a single successor. |
 | `gateway` | Parallel gateway with `onSuccess.flowNodes` branches. |
 | `exclusive-gateway` | `onSuccess.flowNodes` branches and `routes` in evaluation order. |
 | `note` | `note` and position. The editor has no title, tags or status controls. |

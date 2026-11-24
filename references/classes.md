@@ -21,7 +21,7 @@ It separates shared configuration from versioned wording and local instance sett
 | `id`, `revision` | Stable UUID and revision for conditional class patches. Versions have their own revisions. |
 | `title` | Required name. |
 | `instantiable` | Offer in Dashboard's Instantiate menu; false by default. |
-| `type` | `human`, `ai`, `shutdown` or `scheduler`. Gateways, Notes and Values have no classes. |
+| `type` | `human`, `ai`, `shutdown` or `scheduler`. |
 | `tags` | Words copied to instances. |
 | `at`, `duration` | Alternative Scheduler presets; see [Schedulers](chains.md#schedulers). |
 | `permission`, `runner` | AI instance defaults. |
