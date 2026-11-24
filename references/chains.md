@@ -16,7 +16,7 @@ Only explicit successor links define execution order. Dragging, grouping and tag
 
 | Type | Incoming links | Outgoing links |
 |---|---|---|
-| AI, Human, Scheduler, Bitbucket PR Status | At most one | At most one, in `onSuccess.flowNode` |
+| AI, Human, Scheduler, Bitbucket PR Status, Bitbucket Commit Status | At most one | At most one, in `onSuccess.flowNode` |
 | Shutdown | At most one | None |
 | Parallel gateway | Several | Several, in `onSuccess.flowNodes` |
 | Exclusive gateway | At most one | Several, in `onSuccess.flowNodes` |
@@ -59,7 +59,7 @@ Mode and compaction belong to the source card even when its link is removed. Leg
 "compact"` is read as continue plus compaction; new writes use the two separate fields.
 Only AI cards have conversation options, and their execution settings must be complete.
 
-Schedulers, Bitbucket PR Status events, Gateways, Shutdowns and Human tasks carry no AI conversation forward. A `continue`
+Schedulers, Bitbucket events, Gateways, Shutdowns and Human tasks carry no AI conversation forward. A `continue`
 link before one ends conversation continuity there. Structured data follows separate rules and
 can cross waits and Gateways even with `end` or compaction.
 
@@ -109,6 +109,17 @@ repository defaults from its state directory's `atlassian.json` file.
 
 The event checks immediately and continues on the first match. While waiting it passes
 no result. On completion it forwards the incoming JSON to its successor. Stop interrupts the wait.
+
+## Bitbucket Commit Status
+
+Set `commitId` to a Git hash of 7 to 40 hexadecimal characters for the worker's default repository,
+or to `workspace/repository@hash`. Set `commitStatus` to `INPROGRESS`, `SUCCESSFUL`, `FAILED` or
+`STOPPED`. The token in the worker's `atlassian.json` needs repository read access.
+
+The event checks the commit's build results immediately and continues on the first match. A failed
+build takes precedence, followed by an in-progress build and a stopped build. `SUCCESSFUL` requires
+all reported builds to succeed, and an empty list keeps the event waiting. Link the successor in
+`onSuccess.flowNode`. The event forwards incoming JSON on completion. Stop interrupts the wait.
 
 ## Gateways
 

@@ -28,6 +28,7 @@ Choose the capabilities that serve that result:
 | Have a person decide or contribute | **Human task**, with instructions, criteria and a submitted result | Reaching it ends the current run. Dashboard can start a ready successor on submission; plan that boundary. |
 | Delay work | **Scheduler**, for a duration from each start or a particular local datetime | It is a single wait; it does not repeat a workflow. It carries data but no conversation. |
 | Wait for a pull request status | **Bitbucket PR Status**, for one PR and target status | The worker needs Bitbucket Cloud credentials. |
+| Wait for a commit's build status | **Bitbucket Commit Status**, for one commit and target status | The worker needs Bitbucket Cloud credentials with repository read access. |
 | Run independent branches or wait for all results | **Parallel gateway**, which starts all outgoing branches after all incoming branches finish | Every incoming branch must complete successfully. |
 | Choose a path from a JSON result | **Exclusive gateway**, which follows the first true CEL route | One predecessor supplies the JSON. Use a final `true` condition for a default path. |
 | Turn off the runner machine after successful work | **Shutdown**, as the final step | It needs a configured shutdown command. Failure or interruption earlier in the chain leaves the machine on. |
