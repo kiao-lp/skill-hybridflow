@@ -19,13 +19,13 @@ Only explicit successor links define execution order. Dragging, grouping and tag
 | AI, Human, Scheduler, Bitbucket PR Status, Bitbucket Commit Status | At most one | At most one, in `onSuccess.flowNode` |
 | Shutdown | At most one | None |
 | Parallel gateway | Several | Several, in `onSuccess.flowNodes` |
-| Exclusive gateway | At most one | Several, in `onSuccess.flowNodes` |
+| Exclusive gateway | Several | Several, in `onSuccess.flowNodes` |
 | Limiter | At most one | At most two, in `onSuccess.flowNodes` order |
 | Note, Value, Role | None | None |
 
 Targets must be different cards on the same board. Incoming links count Gateway branches and
 links stored on archived cards. Unlink an occupied target before assigning another predecessor,
-or insert a parallel gateway to join branches. Batch creation, patches and link operations enforce these
+or insert a gateway to join branches. Batch creation, patches and link operations enforce these
 limits. The runner validates topology before Play, restart and resume; repair invalid legacy
 chains before starting them. Self-links are refused; a run stops when it reaches a card it has
 already played. Do not use cycles as a repeat mechanism.
@@ -74,9 +74,10 @@ error; success links do not provide failure handlers or guaranteed cleanup.
 Reaching a non-archived Human task sets it to `todo` and ends the current automatic run.
 Dashboard's Work button opens its instructions, criteria and submission editor. Submit completes
 the task and offers a Human successor as `todo`. When chat execution is available, Dashboard
-also starts a ready, runnable automatic successor if no run already holds it; otherwise start
-that successor with Play. Configure the intended successor in advance. Output validation and
-preserving earlier results are covered in [structured data](structured-data.md#human-results).
+also starts a ready, runnable automatic successor if no run already holds it. An exclusive gateway
+accepts each submission while earlier arrivals are running. If automatic start is unavailable,
+start the successor with Play. Configure the intended successor in advance. Output validation
+and preserving earlier results are covered in [structured data](structured-data.md#human-results).
 
 ## Schedulers
 
@@ -148,6 +149,11 @@ and it has no node class. For the order and shape of joined results, read
 
 ### Exclusive gateway
 
+Link independent paths to a single `exclusive-gateway` and set one successor in
+`onSuccess.flowNodes` with an empty `routes` list. Each predecessor completion activates the
+gateway and passes its output to the successor. If another run is playing the successor, the
+arrival waits for the card to become available.
+
 If the condition reads a producer's output, link the producer to a card of type
 `exclusive-gateway`. Link the possible successors in `onSuccess.flowNodes`, then define
 the ordered `routes` array on the gateway.
@@ -164,7 +170,7 @@ the ordered `routes` array on the gateway.
 }
 ```
 
-CEL reads predecessor JSON as `input`, shared workflow values as `currentWorkflow` or
+CEL reads the triggering predecessor's JSON as `input`, shared workflow values as `currentWorkflow` or
 `currentWokflow`, and board roles as `role.ID`. The gateway needs at least one of those sources.
 Each evaluated condition
 returns a boolean. The first `true` condition selects one successor and forwards any predecessor
@@ -211,7 +217,7 @@ selects an AI conversation and records `chat` before sending the prompt. Success
 output and `done`; failure records `error`, while a stopped or abandoned run leaves `interrupted`.
 Instructions and positions remain unchanged. Never simulate these writes through a card patch.
 
-A chain stops when its successor is absent, archived, incomplete, empty of work, held by another
-run, pinned to another runner, or already played by that run. A runner pin is not an automatic
-cross-machine dispatch. Human steps and Gateway arrivals have the boundary behavior described
-above. Read current cards and runner notices to distinguish these outcomes.
+A chain stops when its successor is absent, archived, incomplete, empty of work, pinned to another
+runner, or already played by that run. When another run is playing a successor, arrivals from an
+exclusive gateway wait for the card to become available. Other chains stop there. A runner pin
+is not an automatic cross-machine dispatch. Read current cards and runner notices to distinguish these outcomes.

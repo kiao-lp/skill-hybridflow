@@ -30,6 +30,7 @@ Choose the capabilities that serve that result:
 | Wait for a pull request status | **Bitbucket PR Status**, for one PR and target status | The worker needs Bitbucket Cloud credentials. |
 | Wait for a commit's build status | **Bitbucket Commit Status**, for one commit and target status | The worker needs Bitbucket Cloud credentials with repository read access. |
 | Run independent branches or wait for all results | **Parallel gateway**, which starts all outgoing branches after all incoming branches finish | Every incoming branch must complete successfully. |
+| Join paths that can finish independently | **Exclusive gateway** with one linked successor and an empty route list | Each arrival starts the successor with that predecessor's output. |
 | Choose a path from task data | **Exclusive gateway**, which follows the first true CEL route | Use predecessor JSON or shared workflow values. A final `true` condition supplies a default path. |
 | Use one path a fixed number of times | **Limiter**, which counts down and then uses its second path | Link two successors. The count persists across runs until reset. |
 | Turn off the runner machine after successful work | **Shutdown**, as the final step | It needs a configured shutdown command. Failure or interruption earlier in the chain leaves the machine on. |
@@ -38,7 +39,8 @@ Choose the capabilities that serve that result:
 | Name the people responsible for a role | **Role**, with an ID and one text line per person | Display only. Use `{{role.ID}}` to read the people anywhere on the board. |
 
 Tasks and intermediate events each have at most one predecessor and one successor. Shutdown has at most
-one predecessor and no successor. Gateways and limiters can split. Only the parallel gateway can join.
+one predecessor and no successor. Both gateway types accept several predecessors and successors.
+Limiters can split with at most two successors.
 Notes, Values and Roles have no links.
 Links stay within a board. Do not model repetition with cycles: a run stops at a card it has
 already played. Success links are followed after successful completion; define recovery for

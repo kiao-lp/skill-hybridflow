@@ -165,10 +165,11 @@ outside the lookup. In CEL, read `role.reviewers` or `role['release-reviewers']`
 
 ## Data across control cards
 
-Data passes independently of conversation `mode` and `compact`. Schedulers and single-predecessor
-gateways pass the value through. An exclusive gateway evaluates the value as `input` in CEL and
-forwards it to the selected successor. A limiter forwards the value to the branch selected
-by its counter. [Chains](chains.md)
+Data passes independently of conversation `mode` and `compact`. Schedulers and parallel gateways
+with one predecessor pass the value through. An exclusive gateway takes the output of the
+predecessor that activated it. It forwards that value to its successor and exposes it as `input`
+when evaluating CEL routes. Direct Play uses the most recently completed predecessor. A limiter
+forwards the value to the branch selected by its counter. [Chains](chains.md)
 
 A parallel join exposes an array in **board order**, with `null`
 for any branch without an export. It has no input when no predecessor has output. Each outgoing
