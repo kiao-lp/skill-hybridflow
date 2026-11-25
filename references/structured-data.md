@@ -154,6 +154,15 @@ and remain visible as references in Notes and in the Human Work panel. Exclusive
 same fields in CEL, for example `currentWokflow.approved == true`. Both `currentWokflow` and
 `currentWorkflow` work in fences, placeholders and conditions.
 
+## Role references
+
+Create a card with `type: "role"`, a display `title`, a `roleId` and a `people` array of
+single-line strings. Every active Role ID is unique on its board and uses letters A–Z, digits,
+underscores or hyphens. Use `{{role.reviewers}}` for the role with ID `reviewers` in any field
+that accepts value references. It inserts the people in their stored order with a comma and a
+space between entries. A role with no people inserts an empty string. Archived roles are
+outside the lookup. In CEL, read `role.reviewers` or `role['release-reviewers']`.
+
 ## Data across control cards
 
 Data passes independently of conversation `mode` and `compact`. Schedulers and single-predecessor

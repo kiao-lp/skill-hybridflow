@@ -21,7 +21,7 @@ Only explicit successor links define execution order. Dragging, grouping and tag
 | Parallel gateway | Several | Several, in `onSuccess.flowNodes` |
 | Exclusive gateway | At most one | Several, in `onSuccess.flowNodes` |
 | Limiter | At most one | At most two, in `onSuccess.flowNodes` order |
-| Note, Value | None | None |
+| Note, Value, Role | None | None |
 
 Targets must be different cards on the same board. Incoming links count Gateway branches and
 links stored on archived cards. Unlink an occupied target before assigning another predecessor,
@@ -148,8 +148,9 @@ and it has no node class. For the order and shape of joined results, read
 
 ### Exclusive gateway
 
-Link the producer to a card of type `exclusive-gateway`. Link the possible successors in
-`onSuccess.flowNodes`, then define the ordered `routes` array on the gateway.
+If the condition reads a producer's output, link the producer to a card of type
+`exclusive-gateway`. Link the possible successors in `onSuccess.flowNodes`, then define
+the ordered `routes` array on the gateway.
 
 ```json
 {
@@ -163,8 +164,9 @@ Link the producer to a card of type `exclusive-gateway`. Link the possible succe
 }
 ```
 
-CEL reads predecessor JSON as `input` and the gateway's shared workflow values as
-`currentWokflow`. The gateway needs at least one of those sources. Each evaluated condition
+CEL reads predecessor JSON as `input`, shared workflow values as `currentWorkflow` or
+`currentWokflow`, and board roles as `role.ID`. The gateway needs at least one of those sources.
+Each evaluated condition
 returns a boolean. The first `true` condition selects one successor and forwards any predecessor
 output. Missing data, an evaluation error
 or no matching condition marks the gateway `error`. Use `has(input.field)` to guard optional

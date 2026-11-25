@@ -18,6 +18,7 @@ For editing rules, read [operations](operations.md); for control flow, read [cha
 | `type` | Card type from the table below. Write it explicitly. |
 | `note` | Markdown displayed by a Note, including links. |
 | `value`, `valueType` | Value payload and optional type; see [structured data](structured-data.md). |
+| `roleId`, `people` | Role reference ID and ordered array of person lines. An empty ID clears the key, and `[]` clears the people. |
 | `body` | Task description in Markdown. |
 | `criteria` | Task success criteria: `[{"id":"…","text":"…"}]`. Creation mints missing criterion ids. |
 | `complexity` | Optional task estimate: `1`, `2`, `3`, `5`, `8`, `13` or `21`. Informational; never sent in the prompt. |
@@ -57,7 +58,7 @@ For editing rules, read [operations](operations.md); for control flow, read [cha
 
 Fields unsupported by a type are normalized away or refused. In particular, control cards
 have no task description, criteria, complexity, settings or conversation. Only AI cards use
-conversation options. Notes and Values cannot be played or linked. Old cards can infer AI from
+conversation options. Notes, Values and Roles cannot be played or linked. Old cards can infer AI from
 an agent setting and otherwise Human; new writes should always state the type.
 
 ## Task instructions

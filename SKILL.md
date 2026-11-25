@@ -35,10 +35,11 @@ Choose the capabilities that serve that result:
 | Turn off the runner machine after successful work | **Shutdown**, as the final step | It needs a configured shutdown command. Failure or interruption earlier in the chain leaves the machine on. |
 | Explain the board | **Note**, for Markdown and links | Display only; it does not run or supply task input. |
 | Keep JSON or define a shared data contract | **Value**, optionally typed or used as a JSON Schema | Display only; placing it near a task does not transfer its value to that task. |
+| Name the people responsible for a role | **Role**, with an ID and one text line per person | Display only. Use `{{role.ID}}` to read the people anywhere on the board. |
 
 Tasks and intermediate events each have at most one predecessor and one successor. Shutdown has at most
 one predecessor and no successor. Gateways and limiters can split. Only the parallel gateway can join.
-Notes and Values have no links.
+Notes, Values and Roles have no links.
 Links stay within a board. Do not model repetition with cycles: a run stops at a card it has
 already played. Success links are followed after successful completion; define recovery for
 errors and interruptions separately from the successful path.
