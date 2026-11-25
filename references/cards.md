@@ -19,6 +19,7 @@ For editing rules, read [operations](operations.md); for control flow, read [cha
 | `note` | Markdown displayed by a Note, including links. |
 | `value`, `valueType` | Value payload and optional type; see [structured data](structured-data.md). |
 | `roleId`, `people` | Role reference ID and ordered array of person lines. An empty ID clears the key, and `[]` clears the people. |
+| `description` | Optional short plain-text summary of a Role card. An empty string clears it. |
 | `body` | Task description in Markdown. |
 | `criteria` | Task success criteria: `[{"id":"…","text":"…"}]`. Creation mints missing criterion ids. |
 | `complexity` | Optional task estimate: `1`, `2`, `3`, `5`, `8`, `13` or `21`. Informational; never sent in the prompt. |
