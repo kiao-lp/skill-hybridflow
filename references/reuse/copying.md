@@ -14,9 +14,11 @@ Pass the returned object as `clipboard` to `workflow_paste` with the destination
 the existing cards by omitting it. The same JSON works with Dashboard's **Copy workflow as
 JSON** and **Paste here**.
 
-Paste returns the new workflow and its cards in one write. It preserves the name, all
-members including archived cards, and relative layout. Internal successor links, ordered
-routes and schema references follow the new IDs. Keep schemas and both limiter branches
+Paste returns the new workflow and its cards in one write. It preserves the name, saved
+`currentWorkflow` values, all members including archived cards, and relative layout.
+The shared values travel under `workflow.values` and the copy gets a new workflow ID.
+Internal successor links, ordered routes and schema references follow the new card IDs.
+Keep schemas and both limiter branches
 in the copied group to carry those bindings. The copy starts with fresh execution state
 and limiter counters. Draft and blocked statuses carry over, and unavailable managed
 agent and runner selections are cleared. Review the result through `board_get`.
