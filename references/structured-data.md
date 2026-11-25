@@ -103,8 +103,8 @@ export applies to successful AI tasks with an `outputType`.
 
 ## Predecessor inputs
 
-Before sending an AI prompt, the runner replaces input placeholders in the description (or
-title fallback) and criteria. The saved card keeps its original placeholders.
+The runner replaces references when a card starts. The saved card keeps its original
+references. Human tasks also show predecessor output in the Work panel.
 
 | Placeholder | Reads |
 |---|---|
@@ -119,6 +119,12 @@ index marks the task `error` before a turn. Without input placeholders, a task c
 predecessor data. Only `done`, non-archived predecessors supply it. Direct Play can consume the
 predecessor's last successful export; verify freshness when restarting part of a workflow.
 A Value's payload never becomes task input merely through placement beside it.
+
+AI tasks can use references in the prompt fields and working directory. Human tasks can
+use them in the title, description, criteria and working directory. Scheduler durations and
+datetimes and Bitbucket identifiers and target statuses also accept references. A field can
+combine literal text with references, for example `workspace/repo#{{input.pullRequestId}}`.
+The runner checks the resulting value before using it. Notes can show shared workflow values.
 
 ## Shared workflow values
 
@@ -141,10 +147,10 @@ JSON keeps its JSON type. The runner commits fields with successful task complet
 values override assignments to the same fields in the description. Reserve `name` and `id` for
 the built-in read-only metadata.
 
-Use `{{currentWokflow.message}}`, `{{currentWokflow.name}}` or `{{currentWokflow.id}}` in task
-instructions. Use a dotted path for nested JSON or `{{currentWokflow}}` for the whole object.
-The runner also supplies the object to the AI agent. Missing values stop AI prompt preparation
-and leave the placeholder visible in the Human Work panel. Exclusive gateways can read the
+Use `{{currentWorkflow.message}}`, `{{currentWorkflow.name}}` or `{{currentWorkflow.id}}` in fields
+that accept references. Use a dotted path for nested JSON or `{{currentWorkflow}}` for the whole
+object. The runner also supplies the object to the AI agent. Missing values stop execution
+and remain visible as references in Notes and in the Human Work panel. Exclusive gateways can read the
 same fields in CEL, for example `currentWokflow.approved == true`. Both `currentWokflow` and
 `currentWorkflow` work in fences, placeholders and conditions.
 

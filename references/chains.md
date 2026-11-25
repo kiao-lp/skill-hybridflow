@@ -122,6 +122,11 @@ build takes precedence, followed by an in-progress build and a stopped build. `S
 all reported builds to succeed, and an empty list keeps the event waiting. Link the successor in
 `onSuccess.flowNode`. The event forwards incoming JSON on completion. Stop interrupts the wait.
 
+Both Bitbucket events accept value references in their identifier and target status fields.
+For example, use `{{currentWorkflow.commitId}}` for a shared commit or
+`{{input.pullRequestId}}` for the preceding card's pull request.
+[Value references](structured-data.md)
+
 ## Gateways
 
 ### Parallel gateway
