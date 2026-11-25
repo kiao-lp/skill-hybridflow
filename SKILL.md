@@ -1,6 +1,6 @@
 ---
 name: hybridflow
-description: Design and edit hybridflow boards and workflows, including tasks, agents, runners and reusable classes. Use for human steps, CEL routing, parallel branches, waits, JSON Schema values and task handoffs, or retired .workflow.json boards.
+description: Design and edit hybridflow boards and workflows, including tasks, agents, runners and reusable classes. Use for human steps, CEL routing, parallel branches, waits, JSON Schema, task handoffs, shared workflow values, or retired .workflow.json boards.
 ---
 
 # Hybridflow
@@ -9,8 +9,8 @@ Use this entry point to design the workflow, then read only the references neede
 The references define the same behavior for MCP and HTTP.
 
 A **board** holds cards on a canvas. AI and Human cards are **tasks**; the other cards control
-execution or display information. Success links determine execution order. Placement, tags
-and **workflow** groups organize the view. A workflow group does not start or order its members.
+execution or display information. Success links determine execution order. A **workflow**
+groups cards on the board and holds values its members can share.
 Boards are persisted by hybridflow-store and edited through its API; `.workflow.json` files
 are retired.
 
@@ -30,7 +30,7 @@ Choose the capabilities that serve that result:
 | Wait for a pull request status | **Bitbucket PR Status**, for one PR and target status | The worker needs Bitbucket Cloud credentials. |
 | Wait for a commit's build status | **Bitbucket Commit Status**, for one commit and target status | The worker needs Bitbucket Cloud credentials with repository read access. |
 | Run independent branches or wait for all results | **Parallel gateway**, which starts all outgoing branches after all incoming branches finish | Every incoming branch must complete successfully. |
-| Choose a path from a JSON result | **Exclusive gateway**, which follows the first true CEL route | One predecessor supplies the JSON. Use a final `true` condition for a default path. |
+| Choose a path from task data | **Exclusive gateway**, which follows the first true CEL route | Use predecessor JSON or shared workflow values. A final `true` condition supplies a default path. |
 | Use one path a fixed number of times | **Limiter**, which counts down and then uses its second path | Link two successors. The count persists across runs until reset. |
 | Turn off the runner machine after successful work | **Shutdown**, as the final step | It needs a configured shutdown command. Failure or interruption earlier in the chain leaves the machine on. |
 | Explain the board | **Note**, for Markdown and links | Display only; it does not run or supply task input. |
@@ -50,9 +50,9 @@ or validation results. Distinguish these results from instructions and files ava
 task independently. Where a later decision depends on a result, use a minimal structured output
 contract and consume the required fields explicitly. Independent tasks need no artificial contract.
 
-Trace each required result across Human tasks, waits and joins. A Human task submits its own
-result; it does not automatically forward earlier machine results. Preserve those explicitly,
-for example by reading the named producer's stored output. Read the
+Trace each required result across Human tasks, waits and joins. A Human task supplies its own
+result. Use shared workflow values for fields needed across Human steps or separate plays,
+or read the named producer's stored output. Read the
 [task data reference](references/structured-data.md) when implementing any such dependency.
 
 Conversation continuity is a separate choice. By default, the next AI task uses its own
@@ -98,7 +98,7 @@ replacement fields and verification. For other needs, follow the relevant row on
 | Find, create, rename or inspect a board; resolve a conflict | [Operations](references/operations.md) | `board_list`, `board_get`, `board_create`, `board_patch` |
 | Create, configure, position or mark cards; write task instructions | [Cards](references/cards.md) | `board_add_cards`, `board_get_card`, `board_patch_card` |
 | Link tasks, route by CEL, split or join branches, continue context, wait for time or a PR status, or shut down | [Chains](references/chains.md) | `board_chain_card`, `board_patch_card` |
-| Transfer results, define schemas, consume inputs or preserve data across a Human step | [Structured data](references/structured-data.md) | `board_schema_values`, `board_add_cards`, `board_patch_card`, `board_get_card` |
+| Transfer results, define schemas, consume inputs or share values within a workflow | [Structured data](references/structured-data.md) | `board_schema_values`, `board_add_cards`, `board_patch_card`, `workflow_get` |
 | Select or configure an agent; install, publish, delete or inspect its history | [Agents](references/execution/agents.md) | `agent_list`, `agent_get`, `agent_create`, `agent_patch`, `agent_publish`, `agent_versions`, `agent_delete` |
 | Choose the machine that executes an AI task | [Runners](references/execution/runners.md) | `runner_list`, `runner_get`, `board_patch_card` |
 | Reuse tasks or chains, publish versions or instantiate | [Node classes](references/classes.md) | `class_*`, `board_card_to_class` |

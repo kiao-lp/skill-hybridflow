@@ -158,11 +158,13 @@ Link the producer to a card of type `exclusive-gateway`. Link the possible succe
 }
 ```
 
-CEL sees the predecessor's successful JSON output as `input`. Each evaluated condition must
-return a boolean. The first `true` condition selects one successor and passes the JSON through.
-The gateway ends in `error` if the predecessor has no JSON output, a condition fails to evaluate,
-or every condition is false. Use `has(input.field)` to guard optional object fields. An exclusive
-split starts one path, so a parallel join fed by all its alternatives would wait for every path.
+CEL reads predecessor JSON as `input` and the gateway's shared workflow values as
+`currentWokflow`. The gateway needs at least one of those sources. Each evaluated condition
+returns a boolean. The first `true` condition selects one successor and forwards any predecessor
+output. Missing data, an evaluation error
+or no matching condition marks the gateway `error`. Use `has(input.field)` to guard optional
+fields in the predecessor object. An exclusive split starts one path, so a parallel join fed
+by its alternatives would wait for every path. [Structured data](structured-data.md)
 
 In Dashboard, link successors on the canvas or in **Linked successors**. Add and edit routes in
 the gateway panel and drag the handles to set their order. With MCP or HTTP, patch `routes` with

@@ -26,6 +26,9 @@ already-grouped members moves them. An empty membership id ungroups a member. De
 ungroups and retains its members. Members and their group must belong to the same board; a
 workflow holds cards only, and a workflow class holds classes only.
 
+Use `workflow_get` to read the group's saved `values`. Members can share these fields across
+plays. A newly created or pasted workflow starts with empty shared values. [Structured data](../structured-data.md)
+
 Use [workflow copy and paste](copying.md) to duplicate a group and its cards.
 
 `workflow_class_list` discovers reusable groups across boards. `workflow_class_instantiate`

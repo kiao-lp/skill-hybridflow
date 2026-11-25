@@ -6,7 +6,7 @@ document:
 
 # Structured task data
 
-Read when a task needs results produced earlier, or when creating typed JSON values and schemas.
+Read when a task needs earlier results, shared workflow values, or typed JSON values and schemas.
 These fields and contracts are shared by MCP and HTTP. [Operations](operations.md) covers safe
 patches; [chains](chains.md) describes execution order and conversation options.
 
@@ -17,11 +17,10 @@ acting on validated work. Use a minimal schema for results that drive later deci
 folders and conversation history provide context, but cannot identify the exact result approved.
 Independent tasks need no output schema merely because they are linked.
 
-Trace the result through every intervening step. Immediate predecessor input and an earlier
-producer's stored output are different access paths. Use predecessor placeholders for direct
-handoffs; when a Human step or other task replaces that input, instruct the later AI to read
-the named producer's `output` with `board_get_card` (or the equivalent HTTP read). Check its
-completion and expected artifact identity. Do not make the person recopy machine results.
+Trace the result through each intervening step. Use predecessor placeholders for direct handoffs
+and shared workflow values for fields that cross Human steps or separate plays. To recover the
+stored result of a specific task, read its `output` with `board_get_card` and verify completion
+and artifact identity. Check the freshness of shared values when replaying part of a workflow.
 
 ## Schema values
 
@@ -99,9 +98,8 @@ The **final message** must contain exactly one complete fenced block labelled `o
 Its payload is the JSON value matching the schema: no comments, extra wrapper or string encoding.
 Objects, arrays and scalars work when allowed by the schema; prose may accompany the block.
 A `json` fence, tool result or progress message cannot export data. Missing, incomplete, duplicate,
-malformed or schema-invalid exports mark the task `error` and stop succession. Failed or
-interrupted turns export nothing. An untyped AI task has no export requirement and does not
-export a block merely because its answer contains one.
+malformed or schema-invalid exports mark the task `error` and stop succession. The `output`
+export applies to successful AI tasks with an `outputType`.
 
 ## Predecessor inputs
 
@@ -121,6 +119,34 @@ index marks the task `error` before a turn. Without input placeholders, a task c
 predecessor data. Only `done`, non-archived predecessors supply it. Direct Play can consume the
 predecessor's last successful export; verify freshness when restarting part of a workflow.
 A Value's payload never becomes task input merely through placement beside it.
+
+## Shared workflow values
+
+Group producers and consumers with `workflow_create` or set their `workflow` field with
+`board_patch_card`. A workflow keeps its shared values across plays. `workflow_get` returns the
+workflow's `id` and `name` plus saved custom fields under `values`. `board_get` exposes the same
+fields in `workflows`. The equivalent HTTP reads use the board and workflow endpoints.
+
+Put a complete fenced block in an AI task's `body` to stage one field before rendering its
+prompt. Ask an AI task to return a block in its final reply when it computes the field.
+
+````markdown
+```currentWokflow.message
+Ready for review
+```
+````
+
+Workflow assignments work on any AI task in a workflow. Plain text becomes a string and valid
+JSON keeps its JSON type. The runner commits fields with successful task completion. Final reply
+values override assignments to the same fields in the description. Reserve `name` and `id` for
+the built-in read-only metadata.
+
+Use `{{currentWokflow.message}}`, `{{currentWokflow.name}}` or `{{currentWokflow.id}}` in task
+instructions. Use a dotted path for nested JSON or `{{currentWokflow}}` for the whole object.
+The runner also supplies the object to the AI agent. Missing values stop AI prompt preparation
+and leave the placeholder visible in the Human Work panel. Exclusive gateways can read the
+same fields in CEL, for example `currentWokflow.approved == true`. Both `currentWokflow` and
+`currentWorkflow` work in fences, placeholders and conditions.
 
 ## Data across control cards
 
@@ -144,10 +170,9 @@ an automatic copy of its predecessor's result.
 
 Submit saves `output` and `done` and offers a Human successor as `todo`. Dashboard can start a
 ready automatic successor when chat execution is available; see [Human steps](chains.md#human-steps).
-The successor reads this Human output using the same input rules. If it also needs an earlier
-AI artifact, name that producer explicitly in the instructions or design an explicit preserved
-record. For example, after a Human approval, the action task reads both the approval input and
-the validation task's stored revision rather than asking the person to paste that revision.
+The successor reads this Human output using the same input rules. A later task can combine the
+approval in `input` with an earlier AI task's saved revision in `currentWokflow`. To consume a
+specific producer's output directly, name that producer in the instructions.
 
 ## Output lifetime
 
