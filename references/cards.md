@@ -47,6 +47,7 @@ For editing rules, read [operations](operations.md); for control flow, read [cha
 |---|---|
 | `human` | `title`, `body`, `criteria`, optional `complexity`, `settings.folder`, optional `outputType`, single successor. Work and submission happen in Dashboard. |
 | `ai` | Task fields, plus complete AI `settings`, conversation options and optional `outputType`. |
+| `start` | Title, tags, status, position and one optional successor. |
 | `shutdown` | Title, tags, status and position. No task fields or successor. |
 | `scheduler` | Title, tags, status, position, exactly one of `at` and `duration`, single successor. |
 | `bitbucket-pr-status` | `pullRequestId`, `pullRequestStatus` and a single successor. |

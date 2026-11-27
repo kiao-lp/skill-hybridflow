@@ -17,6 +17,7 @@ Only explicit successor links define execution order. Dragging, grouping and tag
 | Type | Incoming links | Outgoing links |
 |---|---|---|
 | AI, Human, Scheduler, Bitbucket PR Status, Bitbucket Commit Status | At most one | At most one, in `onSuccess.flowNode` |
+| Start | None | At most one, in `onSuccess.flowNode` |
 | Shutdown | At most one | None |
 | Parallel gateway | Several | Several, in `onSuccess.flowNodes` |
 | Exclusive gateway | Several | Several, in `onSuccess.flowNodes` |
@@ -44,7 +45,7 @@ options. Classes link class ids instead of card ids; see [classes](classes.md).
 
 | Key | Rule |
 |---|---|
-| `flowNode` | Single successor for tasks and intermediate events. Empty ends the chain. |
+| `flowNode` | Single successor for tasks, Start and intermediate events. Empty ends the chain. |
 | `flowNodes` | Linked branches. Exclusive gateways use `routes` for evaluation order. Limiters use the successor order. |
 | `mode` | AI only: `end` (default) or `continue`. |
 | `compact` | AI only: shorten this card's conversation after success; default false. |
@@ -78,6 +79,11 @@ also starts a ready, runnable automatic successor if no run already holds it. An
 accepts each submission while earlier arrivals are running. If automatic start is unavailable,
 start the successor with Play. Configure the intended successor in advance. Output validation
 and preserving earlier results are covered in [structured data](structured-data.md#human-results).
+
+## Start event
+
+Create a card of type `start` and set `onSuccess.flowNode` to the first step. Play the card
+from the Dashboard to complete it immediately and start that step. An unlinked Start ends the run.
 
 ## Schedulers
 

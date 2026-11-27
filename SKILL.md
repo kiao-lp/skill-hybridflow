@@ -26,6 +26,7 @@ Choose the capabilities that serve that result:
 |---|---|---|
 | Delegate work | **AI task**, with a selected agent, effort, permissions and working folder | It needs complete execution settings and an available agent on the runner. |
 | Have a person decide or contribute | **Human task**, with instructions, criteria and a submitted result | Reaching it ends the current run. Dashboard can start a ready successor on submission; plan that boundary. |
+| Give a chain an explicit entry point | **Start**, played from the board | Passes execution immediately to its optional successor and accepts no predecessor. |
 | Delay work | **Scheduler**, for a duration from each start or a particular local datetime | It is a single wait; it does not repeat a workflow. It carries data but no conversation. |
 | Wait for a pull request status | **Bitbucket PR Status**, for one PR and target status | The worker needs Bitbucket Cloud credentials. |
 | Wait for a commit's build status | **Bitbucket Commit Status**, for one commit and target status | The worker needs Bitbucket Cloud credentials with repository read access. |
