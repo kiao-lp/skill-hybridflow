@@ -78,7 +78,6 @@ Example consumer patch:
 
 Use actual ids and the revision of each edited card. Preserve existing `onSuccess` options when
 replacing that object, and respect connection limits. `outputType: ""` clears the selection.
-Classes and versions have no output schema: configure it on the task instance.
 
 ## AI export contract
 

@@ -16,9 +16,8 @@ both are accepted. A rename changes the name and leaves the slug stable. If the 
 is missing, report the available boards rather than silently choosing or creating a similar one.
 Board names must be free when creating or renaming.
 
-Read the board before editing. It returns `board`, `flowNodes`, `flowNodeClasses`, `workflows`,
-`workflowClasses` and a change `cursor`. Use these actual ids, revisions and positions.
-`board_get_card` is a smaller refresh when the card id is already known. Card and class ids are
+Read the board before editing. It returns `board`, `flowNodes`, `workflows` and a change `cursor`. Use these actual ids, revisions and positions.
+`board_get_card` is a smaller refresh when the card id is already known. Card ids are
 stable UUIDs; moving an object changes its position, not its identity. Let creation mint ids unless
 creating a batch whose internal references require ids chosen in advance. Avoid collisions.
 
@@ -37,9 +36,9 @@ read-only fields. Preserve supported extension settings under `settings.extra`.
 | `settings`, `tags`, `criteria`, `onSuccess` | Whole replacement. Read the current value, change what is needed, and preserve its other entries. |
 | `onSuccess.flowNodes` | Whole Gateway branch list when patching `onSuccess`. The link-only operation instead adds one branch. |
 | `routes` | Whole ordered exclusive gateway route list. Send `[]` to clear it. |
-| `clearSpot: true` | Clear a card or class position. |
+| `clearSpot: true` | Clear a card position. |
 | `clearComplexity: true` | Clear a task estimate. |
-| `workflow: ""`, `classVersion: ""`, `workflowClass: ""` | Remove the respective membership or class-version binding. |
+| `workflow: ""` | Ungroup the card. |
 | `outputType: ""` | Disable a task's schema selection and clear its saved output. |
 
 Make a write derived from a read conditional on that object's revision: `ifMatch` in MCP,

@@ -43,12 +43,17 @@ A bare flow-node object or array is also accepted. The legacy `kiao-workflow-flo
 is still accepted. Offering clipboard JSON lets a person choose the destination and placement;
 creating cards directly is appropriate when the requested board is already known.
 
+## Fill copied templates
+
+In Dashboard, **Instantiate here** fills description templates before creating the copied cards
+or workflow. See [templates](templates.md).
+
 ## What paste preserves
 
 - Paste always mints new card ids. Links travel only when both ends are copied together, and
   are rewritten to the new ids. Never assume source ids identify pasted cards.
 - Routes follow the same rule. Paste preserves their order and remaps each retained `flowNode`.
-- Description, criteria, complexity and status travel. An AI `chat` never travels: it belongs
+- Description, multi-part template setting, criteria, complexity and status travel. An AI `chat` never travels: it belongs
   to a conversation in the source installation. Successful `output` is never copied.
 - `valueType` schema references and task `outputType` travel only when the schema card is in
   the copied set; paste remaps internal references and clears external ones. Copy the schema

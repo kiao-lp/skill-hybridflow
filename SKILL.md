@@ -1,6 +1,6 @@
 ---
 name: hybridflow
-description: Design and edit hybridflow boards and workflows, including tasks, agents, runners and reusable classes. Use for human steps, CEL routing, parallel branches, waits, JSON Schema, task handoffs, shared workflow values, or retired .workflow.json boards.
+description: Design and edit hybridflow boards and workflows, including tasks, workflow groups, agents and runners. Use for human steps, CEL routing, parallel branches, waits, JSON Schema, task handoffs, shared workflow values, or retired .workflow.json boards.
 ---
 
 # Hybridflow
@@ -75,9 +75,8 @@ validation approved; structured results can pass even when conversations end.
   waits for every incoming branch. Agree on how the consumer identifies each branch's result.
 - **Wait → work → optional Shutdown:** useful for unattended work; it provides neither recurrence
   nor cleanup after failure.
-- **Reuse a proven task or chain:** node classes hold reusable definitions with published
-  versions; workflow classes group reusable definitions. Instances still need local execution
-  settings and output schemas. Description templates instead help author task wording.
+- **Reuse a task or chain** by copying its cards together, or copy the entire workflow. Use
+  **Instantiate here** in Dashboard to fill description templates before creating the copies.
 
 ## Choose the access method
 
@@ -105,10 +104,9 @@ replacement fields and verification. For other needs, follow the relevant row on
 | Transfer results, define schemas, consume inputs or share values within a workflow | [Structured data](references/structured-data.md) | `board_schema_values`, `board_add_cards`, `board_patch_card`, `workflow_get` |
 | Select or configure an agent; install, publish, delete or inspect its history | [Agents](references/execution/agents.md) | `agent_list`, `agent_get`, `agent_create`, `agent_patch`, `agent_publish`, `agent_versions`, `agent_delete` |
 | Choose the machine that executes an AI task | [Runners](references/execution/runners.md) | `runner_list`, `runner_get`, `board_patch_card` |
-| Reuse tasks or chains, publish versions or instantiate | [Node classes](references/classes.md) | `class_*`, `board_card_to_class` |
-| Group cards or classes; instantiate a reusable workflow | [Workflow groups](references/reuse/workflows.md) | `workflow_*`, `workflow_class_*` |
-| Apply description templates or distinguish them from class templates | [Templates](references/reuse/templates.md) | `board_add_cards`, `board_patch_card` |
-| Copy a whole workflow or individual cards; prepare clipboard JSON | [Copying](references/reuse/copying.md) | `workflow_copy`, `workflow_paste`, `board_add_cards` |
+| Group cards or inspect shared workflow values | [Workflow groups](references/reuse/workflows.md) | `workflow_*` |
+| Author or instantiate description templates | [Templates](references/reuse/templates.md) | `board_add_cards`, `board_patch_card` |
+| Copy or instantiate a workflow or cards from the clipboard | [Copying](references/reuse/copying.md) | `workflow_copy`, `workflow_paste`, `board_add_cards` |
 | Archive or remove objects | [Lifecycle operations](references/operations/lifecycle.md) | `board_patch`, `board_patch_card`, the relevant `*_delete` tool |
 | Inspect changes or usage; diagnose the store version | [Observation](references/operations/observation.md) | `board_changes`, `board_card_usage`, `hybridflow_schema` |
 | Diagnose access or operate without working MCP tools | [HTTP fallback and endpoint map](references/api-curl.md) | Tool-to-endpoint map |

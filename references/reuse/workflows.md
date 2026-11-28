@@ -4,34 +4,23 @@ document:
   role: PRIMARY_SOURCE
 ---
 
-# Workflows and workflow classes
+# Workflows
 
-Read to group cards, group reusable definitions or instantiate a workflow class. Node classes
-and their published versions are described in [classes](../classes.md).
+A **workflow** names a group of cards. Dashboard draws a rectangle around its members.
+Links determine execution order.
 
-A **workflow** names a group of cards; Dashboard draws a rectangle around its members. A
-**workflow class** names a group of node classes. Both carry an id, name and revision, with no
-body or position. Neither grouping determines execution order: links remain the order.
+| Operation | Tool |
+|---|---|
+| Create and assign members by their card IDs | `workflow_create` with `flowNodes` |
+| Read or rename a workflow | `workflow_get` or `workflow_patch` |
+| Copy or paste a group and its cards | `workflow_copy` or `workflow_paste` |
+| Change a card's group | `board_patch_card` with `workflow` |
+| Delete a group and retain its cards | `workflow_delete` |
 
-| Operation | Cards | Node classes |
-|---|---|---|
-| Create and assign members | `workflow_create`, `flowNodes` ids | `workflow_class_create`, `classes` ids |
-| Read or rename | `workflow_get`, `workflow_patch` | `workflow_class_get`, `workflow_class_patch` |
-| Copy and paste a group and its cards | `workflow_copy`, `workflow_paste` | |
-| Change a member's group | Patch the card's `workflow` | Patch the class's `workflowClass` |
-| Remove a group | `workflow_delete` | `workflow_class_delete` |
+Each card belongs to at most one workflow on its board. Creating a group with already-grouped
+members moves them. Use an empty workflow ID to ungroup a card.
 
-Membership is stored on each member, at most one group per card or class. Creating a group with
-already-grouped members moves them. An empty membership id ungroups a member. Deleting the group
-ungroups and retains its members. Members and their group must belong to the same board; a
-workflow holds cards only, and a workflow class holds classes only.
+Use `workflow_get` to read the saved `values` that members share across plays. New and pasted
+workflows start with empty shared values. [Structured data](../structured-data.md)
 
-Use `workflow_get` to read the group's saved `values`. Members can share these fields across
-plays. A newly created or pasted workflow starts with empty shared values. [Structured data](../structured-data.md)
-
-Use [workflow copy and paste](copying.md) to duplicate a group and its cards.
-
-`workflow_class_list` discovers reusable groups across boards. `workflow_class_instantiate`
-creates a workflow on the destination board with one card per member class, each from its latest
-published version. It accepts the same `spot` and template `bodies` options as class instantiation.
-Complete instance settings and schemas before offering the resulting tasks for Play.
+For reuse on any board, see [copying](copying.md) and [description templates](templates.md).

@@ -21,6 +21,7 @@ For editing rules, read [operations](operations.md); for control flow, read [cha
 | `roleId`, `people` | Role reference ID and ordered array of person lines. An empty ID clears the key, and `[]` clears the people. |
 | `description` | Optional short plain-text summary of a Role card. An empty string clears it. |
 | `body` | Task description in Markdown. |
+| `multiPartTemplate` | Treat an AI or Human description as a TemplateLang collection when instantiating a copy. See [templates](reuse/templates.md). |
 | `criteria` | Task success criteria: `[{"id":"…","text":"…"}]`. Creation mints missing criterion ids. |
 | `complexity` | Optional task estimate: `1`, `2`, `3`, `5`, `8`, `13` or `21`. Informational; never sent in the prompt. |
 | `settings` | Task execution configuration; see [settings](#settings). |
@@ -35,7 +36,6 @@ For editing rules, read [operations](operations.md); for control flow, read [cha
 | `onSuccess` | Successor links and AI conversation options; see [chains](chains.md). |
 | `routes` | Ordered `{condition, flowNode}` entries for an exclusive gateway. [Chains](chains.md) |
 | `workflow` | This board's workflow group id, or empty for none. |
-| `classVersion` | Read response: `{classId, classTitle, versionId, versionNumber}`. Patch with a version id to rebind, or `""` to detach; see [classes](classes.md). |
 | `run` | Read-only id of the run holding the card, or empty. |
 | `revision` | Read-only revision for conditional writes; see [operations](operations.md). |
 

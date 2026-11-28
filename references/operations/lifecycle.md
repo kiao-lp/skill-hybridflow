@@ -18,9 +18,8 @@ on the objects to remove. Inspect references before deleting:
 
 | Object | Effect |
 |---|---|
-| Board | Removes its cards, classes, versions and workflow groups. |
+| Board | Removes its cards and workflows. |
 | Cards | Removes incoming links from surviving cards. Deleting a schema leaves missing schema ids on task outputs, refusing their next play until repaired. |
-| Node classes | Removes their versions. Check affected instances and class chains. |
-| Workflow or workflow class | Ungroups its members and retains them. |
+| Workflow | Ungroups its members and retains them. |
 | Agent | Inspect clone deletion risks, obtain owner confirmation, then delete using its state fingerprint. Tasks keep the reference; reinstall its repository or choose another agent. |
 | Runner | Check and replace any task pins to that runner. |

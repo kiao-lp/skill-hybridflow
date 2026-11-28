@@ -9,7 +9,7 @@ document:
 Read when `kiao-hybridflow` MCP is absent or its transport is unavailable. This reference defines
 connection, authentication, HTTP request envelopes and the endpoint map. Shared behavior lives
 in [operations](operations.md), [cards](cards.md), [chains](chains.md),
-[structured data](structured-data.md), [classes](classes.md) and the targeted references linked
+[structured data](structured-data.md) and the targeted references linked
 from the skill. Use the same semantics regardless of transport.
 
 ## Reaching the boards
@@ -57,7 +57,7 @@ curl --fail-with-body -sS -X PATCH "$HYBRIDFLOW/boards/major/flow-nodes/<card-id
 
 Replace angle-bracket placeholders before calling. Use `--data-binary @request.json` for a body
 prepared in a file, especially when it includes Markdown or literal interpolation placeholders.
-A board read returns `board`, `flowNodes`, `flowNodeClasses`, `workflows`, `workflowClasses` and
+A board read returns `board`, `flowNodes`, `workflows` and
 `cursor`. Collection listings use the corresponding collection name, such as `boards` or `agents`.
 
 | Status | Meaning and response |
@@ -87,19 +87,11 @@ Optional fields below are supplied only when needed.
 | Create cards | `{"flowNodes":[<card>, ...]}` with fields from [cards](cards.md). |
 | Patch card | Changed card fields directly, with no `patch` wrapper. |
 | Delete cards | `{"flowNodes":["<id>", ...]}` |
-| Chain card or class | `{"flowNode":"<target-id>"}`; empty target unlinks. |
-| Convert task to class | `{}` |
-| Create class | Class fields and optional first-version fields from [classes](classes.md). |
-| Patch class or version | Changed fields directly, with no `patch` wrapper. |
-| Delete classes | `{"flowNodeClasses":["<id>", ...]}` |
-| Create version | Version fields and/or `from` version id; `{}` creates a blank draft. |
-| Instantiate class or workflow class | Optional `spot` and `bodies`; `{}` uses defaults. |
+| Chain card | `{"flowNode":"<target-id>"}`; empty target unlinks. |
 | Create workflow ([group rules](reuse/workflows.md)) | `{"name":"Release","flowNodes":["<id>", ...]}`; both fields optional. |
 | Paste workflow ([clipboard format](reuse/copying.md)) | `{"clipboard": <copy response>, "spot": {"x": 100, "y": 200}}`; `spot` is optional. |
-| Create workflow class ([group rules](reuse/workflows.md)) | `{"name":"Release","classes":["<id>", ...]}`; both fields optional. |
-| Rename workflow, workflow class or runner | `{"name":"New name"}` |
+| Rename workflow or runner | `{"name":"New name"}` |
 | Delete workflows | `{"workflows":["<id>", ...]}` |
-| Delete workflow classes | `{"workflowClasses":["<id>", ...]}` |
 | Create or patch agent | Supplied [agent fields](execution/agents.md), without a wrapper. |
 | Publish agent | No body; include `If-Match` when based on a read. |
 | Create runner | `{"name":"local"}` |
@@ -122,30 +114,13 @@ Direct store calls use the paths shown here.
 | `board_delete_cards` | `DELETE /boards/{handle}/flow-nodes` |
 | `board_chain_card` | `POST /boards/{handle}/flow-nodes/{id}/chain` |
 | `board_card_usage` | `GET /boards/{handle}/flow-nodes/{id}/usage` |
-| `board_card_to_class` | `POST /boards/{handle}/flow-nodes/{id}/to-class` |
 | `board_schema_values` | `GET /schema-values` |
-| `class_list` | `GET /flow-node-classes` |
-| `class_create` | `POST /boards/{handle}/flow-node-classes` |
-| `class_get` | `GET /boards/{handle}/flow-node-classes/{id}` |
-| `class_patch` | `PATCH /boards/{handle}/flow-node-classes/{id}` |
-| `class_delete` | `DELETE /boards/{handle}/flow-node-classes` |
-| `class_chain` | `POST /boards/{handle}/flow-node-classes/{id}/chain` |
-| `class_create_version` | `POST /boards/{handle}/flow-node-classes/{id}/versions` |
-| `class_patch_version` | `PATCH /boards/{handle}/flow-node-classes/{id}/versions/{versionId}` |
-| `class_delete_version` | `DELETE /boards/{handle}/flow-node-classes/{id}/versions/{versionId}` |
-| `class_instantiate` | `POST /boards/{handle}/flow-node-classes/{id}/instantiate` |
 | `workflow_create` | `POST /boards/{handle}/workflows` |
 | `workflow_get` | `GET /boards/{handle}/workflows/{id}` |
 | `workflow_copy` | `GET /boards/{handle}/workflows/{id}/clipboard` |
 | `workflow_paste` | `POST /boards/{handle}/workflows/clipboard` |
 | `workflow_patch` | `PATCH /boards/{handle}/workflows/{id}` |
 | `workflow_delete` | `DELETE /boards/{handle}/workflows` |
-| `workflow_class_list` | `GET /workflow-classes` |
-| `workflow_class_create` | `POST /boards/{handle}/workflow-classes` |
-| `workflow_class_get` | `GET /boards/{handle}/workflow-classes/{id}` |
-| `workflow_class_patch` | `PATCH /boards/{handle}/workflow-classes/{id}` |
-| `workflow_class_delete` | `DELETE /boards/{handle}/workflow-classes` |
-| `workflow_class_instantiate` | `POST /boards/{handle}/workflow-classes/{id}/instantiate` |
 | `agent_list` | `GET /agents` |
 | `agent_create` | `POST /agents` |
 | `agent_get` | `GET /agents/{id}` |

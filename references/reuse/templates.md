@@ -6,9 +6,8 @@ document:
 
 # Task description templates
 
-Read when authoring task wording with templates, or choosing between editor templates and
-reusable [classes](../classes.md). Templates change wording; [structured data](../structured-data.md)
-defines placeholders evaluated when an AI task actually runs.
+Read when authoring or filling a task description template. [Structured data](../structured-data.md)
+defines placeholders evaluated when an AI task runs.
 
 ## Editor description templates
 
@@ -30,9 +29,13 @@ Templates are applied by the **editor**, not by Play. Cards created through MCP 
 body sent by the caller. To produce the same wording as the editor, read the relevant store
 template and compose the intended body before creating or patching the card.
 
-## Class-version templates
+## Instantiate copied descriptions
 
-A class version's `template` flag instead asks for filled text during **instantiation**.
-The `bodies` map supplies it by class id. Ordinary versions copy their body unchanged.
-This is independent of the editor's `.temp.md` files. Instantiated input placeholders remain
-in the saved body and are resolved by the runner only at execution time.
+Use **Copy as JSON** on a card, or **Copy workflow as JSON** on a workflow, then choose
+**Instantiate here** on the destination board. For a group of cards, fill each templated description
+in turn. Dashboard creates the copy after the last confirmation.
+
+A Markdown description can contain variables such as `${project:text}`. Turn on
+**Multi-part template** to author a TemplateLang collection with optional sections. Use
+[copying](copying.md) for how links and execution settings travel with the copy. The MCP and
+HTTP creation and paste operations store the descriptions supplied by the caller.

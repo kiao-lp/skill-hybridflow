@@ -35,7 +35,7 @@ already played. Do not use cycles as a repeat mechanism.
 `flowNode: ""` unlinks it. For a Gateway, a nonempty target adds one branch idempotently and an
 empty target clears all branches. To remove just one branch, patch `onSuccess` with the complete
 remaining `flowNodes` list. Patching `onSuccess` replaces the whole object: preserve its other
-options. Classes link class ids instead of card ids; see [classes](classes.md).
+options.
 
 ## On success
 
@@ -102,7 +102,7 @@ A Scheduler waits once, then follows its successor. Choose exactly one mode:
 - `at` is `YYYY-MM-DDTHH:mm`, without seconds or zone, on the runner machine's local clock.
   A past datetime continues immediately.
 - Setting one field nonempty clears the other. Sending both nonempty is refused; clearing both
-  leaves the card incomplete. These rules also apply to class presets.
+  leaves the card incomplete.
 - Play starts the wait, from the small button beside the clock or through a predecessor. Only a
   configured, `ready` Scheduler offers Play. Its title is edited in the panel and hidden on the canvas.
 - The Scheduler is `running` while waiting and `done` when the wait finishes. Stop cancels the
@@ -149,8 +149,8 @@ A failed branch holds the AND join until resolved.
 
 Firing starts every outgoing branch in parallel as a separate run and ends the arriving run.
 Each AI branch uses its own conversation. A Gateway with no outgoing branches simply finishes;
-with no incoming branches it can act as a split. It needs no task settings, description or mode,
-and it has no node class. For the order and shape of joined results, read
+with no incoming branches it can act as a split. It needs no task settings, description or mode.
+For the order and shape of joined results, read
 [structured data](structured-data.md#data-across-control-cards).
 
 ### Exclusive gateway
