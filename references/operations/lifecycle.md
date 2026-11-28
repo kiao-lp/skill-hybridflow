@@ -9,9 +9,9 @@ document:
 Read when archiving or deleting objects. Apply the shared [editing rules](../operations.md)
 and refresh the affected references before removal.
 
-Archiving a board or card is reversible. Board listings omit archived boards by default; card
-archives hide cards and their links. Stored links from archived cards still occupy connection
-slots. Unlink them explicitly if rewiring requires it.
+Archiving a board or flow node is reversible. Board listings omit archived boards by default.
+Archiving a flow node hides its card and its links. Its successor links still occupy
+connection slots. Unlink them explicitly if rewiring requires it.
 
 Deletes are permanent. Delete only within the user's authorized scope; otherwise obtain agreement
 on the objects to remove. Inspect references before deleting:

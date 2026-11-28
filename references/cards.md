@@ -6,7 +6,8 @@ document:
 
 # Cards
 
-Read when creating or configuring cards. These are shared field semantics for MCP and HTTP.
+Read when creating or configuring flow nodes. Their cards display these fields on the board.
+MCP exposes the same fields through its card tools.
 For editing rules, read [operations](operations.md); for control flow, read [chains](chains.md).
 
 ## Fields
@@ -14,8 +15,8 @@ For editing rules, read [operations](operations.md); for control flow, read [cha
 | Field | Meaning |
 |---|---|
 | `id` | Stable UUID, minted on creation unless supplied for batch references. |
-| `title` | Card name. For an AI prompt, used only when `body` is empty. |
-| `type` | Card type from the table below. Write it explicitly. |
+| `title` | Flow node name. For an AI prompt, used only when `body` is empty. |
+| `type` | Flow node type from the table below. Write it explicitly. |
 | `note` | Markdown displayed by a Note, including links. |
 | `value`, `valueType` | Value payload and optional type; see [structured data](structured-data.md). |
 | `roleId`, `people` | Role reference ID and ordered array of person lines. An empty ID clears the key, and `[]` clears the people. |
@@ -32,7 +33,7 @@ For editing rules, read [operations](operations.md); for control flow, read [cha
 | `spot` | Position on this board's canvas; see [placement](#placement). |
 | `tags` | Array of plain words; see [tags](#tags). |
 | `status`, `chat` | Work state and AI conversation; see [status and chat](#status-and-chat). |
-| `archived` | Boolean, false by default. Hides the card and its links; stored links still count toward topology limits. |
+| `archived` | Boolean, false by default. Hides the card and its links. Successor links still count toward topology limits. |
 | `onSuccess` | Successor links and AI conversation options; see [chains](chains.md). |
 | `routes` | Ordered `{condition, flowNode}` entries for an exclusive gateway. [Chains](chains.md) |
 | `workflow` | This board's workflow group id, or empty for none. |
@@ -41,7 +42,7 @@ For editing rules, read [operations](operations.md); for control flow, read [cha
 
 ## Flow node type
 
-**Task** means AI or Human. **Flow node** and **card** cover all the types below.
+AI and Human flow nodes carry tasks. Each type is displayed as a card on the canvas.
 
 | Type | Fields specific to that type |
 |---|---|
@@ -74,9 +75,9 @@ Descriptions and criteria stay on the card after success, error or interruption.
 an AI card reuses its conversation unless execution creates or assigns another one. To ask a
 follow-up, update its body if needed and return it to `ready`.
 
-Write image and document links from the store root, with a leading slash. A card has no
-document folder against which relative Markdown links could resolve. Pasted screenshots are
-stored under `/boards/<slug>/`; the runner tells the agent where linked image files can be read.
+Write image and document destinations as DCMS links such as `/docs/guide.md`, resolved from
+the DCMS root. Pasted screenshots default to the board's folder. The runner supplies the
+absolute paths of linked images on the worker.
 Description templates are applied by the editor, not by execution; see [templates](reuse/templates.md).
 
 ## Settings
@@ -90,7 +91,7 @@ Description templates are applied by the editor, not by execution; see [template
 | `agent` | Required for AI: managed agent **id**. Select an active published agent using its published description; see [agents](execution/agents.md). |
 | `effort` | Required for AI, using that agent harness's vocabulary. |
 | `permission` | Required for AI, using that harness's supported permission modes. |
-| `folder` | Required for AI; also records the work location for Human tasks. Store link with a leading slash, `/` for the root. |
+| `folder` | Required for AI. Optional for Human tasks. Use a DCMS link to the working folder or a context expression such as `{{workflowFolder}}`. `/` selects the DCMS root. |
 | `runner` | Optional AI runner id. Without one, work executes where Play is pressed; see [runners](execution/runners.md). |
 | `extra` | Preserved extension settings, as string key/value pairs. |
 

@@ -10,9 +10,10 @@ Read to select, install, configure, publish or delete an agent. Task settings ar
 [cards](../cards.md); [runners](runners.md) covers machine selection. The `agent_*` MCP tools
 perform these operations; HTTP equivalents are in [api-curl](../api-curl.md).
 
-An agent names the harness, model, execution profile, standing instructions and selection
-purpose used by AI tasks. A task's `settings.agent` is its stable repository **id**.
-agentic-resource-manager stores agents in Git working trees and discovers manual clones.
+An agent provides standing instructions and assembles resources for related tasks. A harness
+executes each turn and offers its model and permission options. An agent can support several
+harnesses and supply execution defaults. A task's `settings.agent` is the agent's stable **id**.
+agentic-resource-manager discovers its Git working tree, including manual clones.
 
 ## Select an agent
 

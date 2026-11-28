@@ -8,9 +8,9 @@ description: Design and edit hybridflow boards and workflows, including tasks, w
 Use this entry point to design the workflow, then read only the references needed to build it.
 The references define the same behavior for MCP and HTTP.
 
-A **board** holds cards on a canvas. AI and Human cards are **tasks**; the other cards control
-execution or display information. Success links determine execution order. A **workflow**
-groups cards on the board and holds values its members can share.
+A **board** holds **flow nodes**. A **card** is a flow node's representation on the canvas.
+AI and Human flow nodes carry **tasks**. Successor links determine execution order.
+A **workflow** groups flow nodes and holds values its members can share.
 Boards are persisted by hybridflow-store and edited through its API; `.workflow.json` files
 are retired.
 
