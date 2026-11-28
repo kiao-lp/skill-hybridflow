@@ -1,9 +1,1 @@
-{
-  "name": "hybridflow",
-  "version": "1.0.6",
-  "description": "hybridflow skill",
-  "targets": [
-    "codex",
-    "claude"
-  ]
-}
+{"name": "hybridflow", "version": "1.0.7", "description": "hybridflow skill", "targets": ["codex", "claude"]}
